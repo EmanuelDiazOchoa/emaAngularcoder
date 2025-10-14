@@ -1,9 +1,16 @@
 import { Component } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { NombreCompletoPipe } from '../../pipes/nombre-completo-pipe';
 
 @Component({
   selector: 'app-lista-alumnos',
   templateUrl: './lista-alumnos.html',
-  styleUrls: ['./lista-alumnos.scss']
+  styleUrls: ['./lista-alumnos.scss'],
+  imports: [
+    MatTableModule,
+    NombreCompletoPipe
+  ],
+  standalone: true
 })
 export class ListaAlumnosComponent {
   columnas = ['nombre', 'curso'];

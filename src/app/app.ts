@@ -5,9 +5,10 @@ import { SidebarComponent } from './layout/sidebar/sidebar';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent],
+  imports: [
+    SidebarComponent
+],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
-export class AppComponent {
-}
+export class AppComponent {}
