@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { AlumnosService } from '../alumnos.service';
 
 @Component({
   selector: 'app-abm-alumnos',
@@ -18,17 +19,21 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class AbmAlumnosComponent {
   form: FormGroup;
+  alumnosService = inject(AlumnosService);
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      nombre: [''],
-      apellido: [''],
-      email: ['']
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]]
     });
   }
 
   agregar() {
-    // lógica para agregar alumno
-    console.log(this.form.value);
+    if (this.form.invalid) {
+      return;
+    }
+    this.alumnosService.addAlumno(this.form.value);
+    this.form.reset();
   }
 }

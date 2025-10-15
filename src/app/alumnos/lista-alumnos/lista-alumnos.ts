@@ -1,22 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { NombreCompletoPipe } from '../../pipes/nombre-completo-pipe';
+import { AlumnosService } from '../alumnos.service';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-lista-alumnos',
   templateUrl: './lista-alumnos.html',
   styleUrls: ['./lista-alumnos.scss'],
   imports: [
+    CommonModule,
     MatTableModule,
-    NombreCompletoPipe
+    NombreCompletoPipe,
+    MatButtonModule,
+    MatIconModule
   ],
   standalone: true
 })
 export class ListaAlumnosComponent {
-  columnas = ['nombre', 'curso'];
-  alumnos = [
-    { nombre: 'Emanuel', apellido: 'Díaz', curso: 'Angular 20' },
-    { nombre: 'Lucía', apellido: 'Pérez', curso: 'React' },
-    { nombre: 'Juan', apellido: 'Gómez', curso: 'Node.js' },
-  ];
+  alumnosService = inject(AlumnosService);
+  columnas = ['nombre', 'email', 'acciones'];
+  alumnos$ = this.alumnosService.getAlumnos();
+
+  eliminarAlumno(id: number): void {
+    this.alumnosService.deleteAlumno(id);
+  }
 }
