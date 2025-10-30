@@ -1,0 +1,22 @@
+.navbar {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+  .nav-link {
+    color: #ccc !important;
+    transition: color 0.3s ease;
+
+    &:hover,
+    &.active {
+      color: #fff !important;
+    }
+  }
+
+  .navbar-brand {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

@@ -1,0 +1,19 @@
+<h2>Agregar Alumno</h2>
+<form [formGroup]="form" (ngSubmit)="agregar()">
+  <mat-form-field>
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="nombre">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Apellido</mat-label>
+    <input matInput formControlName="apellido">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email">
+  </mat-form-field>
+
+  <button mat-raised-button color="primary">Agregar</button>
+</form>
