@@ -19,7 +19,7 @@ export class AlumnosService {
     if (storedAlumnos) {
       this.alumnos = JSON.parse(storedAlumnos);
     } else {
-      // If no data in localStorage, use initial mock data
+      
       this.alumnos = [
         { id: 1, nombre: 'Juan', apellido: 'Perez', email: 'juan.perez@example.com' },
         { id: 2, nombre: 'Maria', apellido: 'Gomez', email: 'maria.gomez@example.com' }
