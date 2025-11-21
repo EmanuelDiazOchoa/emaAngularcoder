@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { ListaInscripcionesComponent } from './components/lista-inscripciones/lista-inscripciones.component';
-import { NuevaInscripcionComponent } from './components/nuevo-inscripcion/nuevo-inscripcion.component';
+import { NuevoInscripcionComponent } from './components/nuevo-inscripcion/nuevo-inscripcion.component';
 
 export const INSCRIPCIONES_ROUTES: Routes = [
   {
@@ -9,6 +9,6 @@ export const INSCRIPCIONES_ROUTES: Routes = [
   },
   {
     path: 'nueva',
-    component: NuevaInscripcionComponent
+    component: NuevoInscripcionComponent
   }
 ];

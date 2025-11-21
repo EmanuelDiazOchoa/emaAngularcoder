@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { UsuariosService } from '../../services/usuario.service';
+import { UsuariosService } from '../../../../core/services/usuario.service';
 import { Usuario, Rol } from '../../../../core/models/usuario.model';
 
 @Component({

@@ -1,0 +1,23 @@
+<div class="container mt-4">
+  <h2>📝 Nueva Inscripción</h2>
+
+  <div class="mt-3">
+    <label class="form-label">Usuario</label>
+    <select class="form-select" [(ngModel)]="usuarioSeleccionado">
+      <option [value]="u.id" *ngFor="let u of usuarios$ | async">
+        {{ u.nombre }} {{ u.apellido }}
+      </option>
+    </select>
+  </div>
+
+  <div class="mt-3">
+    <label class="form-label">Curso</label>
+    <select class="form-select" [(ngModel)]="cursoSeleccionado">
+      <option [value]="c.id" *ngFor="let c of cursos$ | async">
+        {{ c.nombre }}
+      </option>
+    </select>
+  </div>
+
+  <button (click)="guardar()" class="btn btn-success mt-3">Guardar</button>
+</div>

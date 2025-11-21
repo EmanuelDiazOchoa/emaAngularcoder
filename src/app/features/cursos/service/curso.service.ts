@@ -28,7 +28,8 @@ export class CursoService {
 
   private cursos$ = new BehaviorSubject<Curso[]>(this.cursos);
 
-  getCursos(): Observable<Curso[]> {
+  // Método para obtener cursos
+  obtenerCursos(): Observable<Curso[]> {
     return this.cursos$.asObservable();
   }
 
@@ -57,6 +58,7 @@ export class CursoService {
     this.cursos = this.cursos.filter(c => c.id !== id);
     this.cursos$.next(this.cursos);
   }
+
   obtenerCursoPorId(id: number): Curso | undefined {
     return this.cursos.find(c => c.id === id);
   }

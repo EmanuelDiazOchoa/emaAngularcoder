@@ -4,7 +4,7 @@ import { InscripcionesService } from '../../services/inscripciones.service';
 import { Observable } from 'rxjs';
 import { Inscripcion } from '../../../../core/models/inscripcion.model';
 import { CursoService } from '../../../cursos/service/curso.service';
-import { UsuariosService } from '../../../usuarios/services/usuario.service';
+import { UsuariosService } from '../../../../core/services/usuario.service';
 
 @Component({
   selector: 'app-lista-inscripciones',
@@ -49,17 +49,20 @@ export class ListaInscripcionesComponent {
     this.inscripciones$ = this.inscripcionesService.obtenerInscripciones();
   }
 
-  eliminar(id: string) {
-    this.inscripcionesService.eliminarInscripcion(id);
+  eliminar(id: number) {
+    this.inscripcionesService.eliminar(id);
+
   }
 
-  obtenerNombreUsuario(id?: string): string {
+  // 🔥 KEY FIX: tipo number, no string
+  obtenerNombreUsuario(id?: number): string {
     if (!id) return 'Desconocido';
     const u = this.usuariosService.getByIdSync(id);
     return u ? `${u.nombre} ${u.apellido ?? ''}`.trim() : 'Desconocido';
   }
 
-  obtenerNombreCurso(id?: string): string {
+  // 🔥 KEY FIX: tipo number, no string
+  obtenerNombreCurso(id?: number): string {
     if (!id) return 'Desconocido';
     const c = this.cursosService.obtenerCursoPorId(id);
     return c?.nombre ?? 'Desconocido';

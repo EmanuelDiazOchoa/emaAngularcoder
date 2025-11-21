@@ -1,45 +1,35 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'; 
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Inscripcion } from '../../../core/models/inscripcion.model';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class InscripcionesService {
 
-  // Mock temporal en memoria
-  private inscripciones: Inscripcion[] = [
-    { id: 1, idCurso: 1, idUsuario: 3, fecha: new Date().toISOString() },
-  ];
+  private inscripciones: Inscripcion[] = [];
 
-  private inscripcionesSubject = new BehaviorSubject<Inscripcion[]>(this.inscripciones);
-  inscripciones$ = this.inscripcionesSubject.asObservable();
+  private inscripciones$ = new BehaviorSubject<Inscripcion[]>(this.inscripciones);
 
-  constructor() {}
-
+  // Obtener todas
   obtenerInscripciones(): Observable<Inscripcion[]> {
-    return this.inscripciones$;
+    return this.inscripciones$.asObservable();
   }
 
-  crearInscripcion(inscripcion: Inscripcion): void {
-    inscripcion.id = this.generarId();
-    this.inscripciones.push(inscripcion);
-    this.emitirCambios();
+  // Agregar inscripción
+  agregar(inscripcion: Omit<Inscripcion, 'id'>) {
+    const nueva: Inscripcion = {
+      id: this.inscripciones.length + 1,
+      ...inscripcion
+    };
+
+    this.inscripciones.push(nueva);
+    this.inscripciones$.next(this.inscripciones);
   }
 
-  eliminarInscripcion(id: number): void {
+  // Eliminar inscripción
+  eliminar(id: number) {
     this.inscripciones = this.inscripciones.filter(i => i.id !== id);
-    this.emitirCambios();
-  }
-
-  private generarId(): number {
-    return this.inscripciones.length > 0 
-      ? Math.max(...this.inscripciones.map(i => i.id)) + 1
-      : 1;
-  }
-
-  private emitirCambios(): void {
-    this.inscripcionesSubject.next([...this.inscripciones]);
+    this.inscripciones$.next(this.inscripciones);
   }
 }

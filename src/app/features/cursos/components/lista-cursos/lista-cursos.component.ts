@@ -20,7 +20,7 @@ export class ListaCursosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cursoService.getCursos().subscribe(data => {
+    this.cursoService.obtenerCursos().subscribe((data: Curso[]) => {
       this.cursos = data;
     });
   }
