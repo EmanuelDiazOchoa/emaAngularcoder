@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UsuariosService } from '../../../../core/services/usuario.service';
+import { UsuariosService } from '../../services/usuario.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../../../../core/models/usuario.model';
 

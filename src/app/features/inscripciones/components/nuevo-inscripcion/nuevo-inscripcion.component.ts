@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InscripcionesService } from '../../../../core/services/inscripciones.service';
-import { UsuariosService } from '../../../../core/services/usuario.service';
+import { InscripcionesService } from '../../services/inscripciones.service';
+import { UsuariosService } from '../../../usuarios/services/usuario.service';
 import { CursoService } from '../../../cursos/service/curso.service';
 import { FormsModule } from '@angular/forms';
 

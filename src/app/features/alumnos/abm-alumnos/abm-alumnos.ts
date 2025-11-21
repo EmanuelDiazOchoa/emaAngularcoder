@@ -3,7 +3,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { AlumnosService } from '../../../core/services/alumnos.service';
+import { AlumnosService } from '../services/alumnos.service';
 
 @Component({
   selector: 'app-abm-alumnos',

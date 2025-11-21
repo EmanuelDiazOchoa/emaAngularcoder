@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InscripcionesService } from '../../../../core/services/inscripciones.service';
+import { InscripcionesService } from '../../services/inscripciones.service';
 import { Observable } from 'rxjs';
 import { Inscripcion } from '../../../../core/models/inscripcion.model';
 import { CursoService } from '../../../cursos/service/curso.service';
-import { UsuariosService } from '../../../../core/services/usuario.service';
-import { AlumnosService } from '../../../../core/services/alumnos.service';
+import { UsuariosService } from '../../../usuarios/services/usuario.service';
 
 @Component({
   selector: 'app-lista-inscripciones',
@@ -14,7 +13,7 @@ import { AlumnosService } from '../../../../core/services/alumnos.service';
   template: `
   <div class="container mt-4">
     <h2>📋 Lista de Inscripciones</h2>
-    
+
     <table class="table table-striped mt-3">
       <thead>
         <tr>
@@ -27,13 +26,11 @@ import { AlumnosService } from '../../../../core/services/alumnos.service';
 
       <tbody>
         <tr *ngFor="let i of inscripciones$ | async">
-          <td>{{ obtenerNombreUsuario(i.idUsuario) }}</td>
-          <td>{{ obtenerNombreCurso(i.idCurso) }}</td>
+          <td>{{ obtenerNombreUsuario(i.usuarioId) }}</td>
+          <td>{{ obtenerNombreCurso(i.cursoId) }}</td>
           <td>{{ i.fecha | date:'short' }}</td>
           <td>
-            <button class="btn btn-danger btn-sm" (click)="eliminar(i.id)">
-              🗑 Eliminar
-            </button>
+            <button class="btn btn-danger btn-sm" (click)="eliminar(i.id)">Eliminar</button>
           </td>
         </tr>
       </tbody>
@@ -42,27 +39,29 @@ import { AlumnosService } from '../../../../core/services/alumnos.service';
   `
 })
 export class ListaInscripcionesComponent {
-
   inscripciones$: Observable<Inscripcion[]>;
 
   constructor(
     private inscripcionesService: InscripcionesService,
-    private alumnosService: AlumnosService,
     private cursosService: CursoService,
     private usuariosService: UsuariosService,
   ) {
     this.inscripciones$ = this.inscripcionesService.obtenerInscripciones();
   }
 
-  eliminar(id: number) {
+  eliminar(id: string) {
     this.inscripcionesService.eliminarInscripcion(id);
   }
 
-  obtenerNombreUsuario(id: number): string {
-    return this.usuariosService.obtenerPorId(id)?.nombre ?? 'Desconocido';
+  obtenerNombreUsuario(id?: string): string {
+    if (!id) return 'Desconocido';
+    const u = this.usuariosService.getByIdSync(id);
+    return u ? `${u.nombre} ${u.apellido ?? ''}`.trim() : 'Desconocido';
   }
 
-  obtenerNombreCurso(id: number): string {
-    return this.cursosService.obtenerCursoPorId(id)?.nombre ?? 'Desconocido';
+  obtenerNombreCurso(id?: string): string {
+    if (!id) return 'Desconocido';
+    const c = this.cursosService.obtenerCursoPorId(id);
+    return c?.nombre ?? 'Desconocido';
   }
 }

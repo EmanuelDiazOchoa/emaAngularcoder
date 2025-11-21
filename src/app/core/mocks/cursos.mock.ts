@@ -6,15 +6,15 @@ export const CURSOS_MOCK: Curso[] = [
     nombre: 'Angular Inicial',
     descripcion: 'Curso básico de Angular',
     duracion: '8 semanas',
-    fechaInicio: '2025-02-01',
-    fechaFin: '2025-04-01'
+    fechaInicio: '2024-01-01',
+    fechaFin: '2024-02-26'
   },
   {
     id: 2,
     nombre: 'React Avanzado',
     descripcion: 'Hooks, Context API, Router',
     duracion: '6 semanas',
-    fechaInicio: '2025-03-15',
-    fechaFin: '2025-05-01'
+    fechaInicio: '2024-03-01',
+    fechaFin: '2024-04-12'
   }
 ];

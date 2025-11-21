@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { NombreCompletoPipe } from '../../../shared/pipes/nombre-completo-pipe';
-import { AlumnosService } from '../../../core/services/alumnos.service';
+import { AlumnosService } from '../services/alumnos.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
