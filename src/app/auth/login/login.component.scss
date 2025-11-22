@@ -1,16 +1,57 @@
-.container {
+.login-wrapper {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  background: linear-gradient(135deg, #001f3f, #1e3a8a);
+  background-size: cover;
+  padding: 20px;
 }
 
 .login-card {
-  width: 350px;
-  padding: 20px;
-  text-align: center;
+  width: 370px;
+  padding: 25px 30px;
+  border-radius: 16px;
+  backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+  animation: fadeIn 0.6s ease-in-out;
 }
 
-.full {
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 26px;
+}
+
+.full-width {
   width: 100%;
+  margin-bottom: 12px;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 10px;
+  font-size: 17px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: transform 0.2s ease-in-out;
+}
+
+.btn-login:hover {
+  transform: scale(1.03);
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+  background-color: rgba(255, 255, 255, 0.10) !important;
+  border-radius: 10px !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

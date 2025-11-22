@@ -26,22 +26,19 @@ export class AuthService {
     }
   }
 
-login(email: string, password: string, rol: Rol): boolean {
-  this.usuarioActual = {
-    id: email === 'admin@mail.com' ? 1 : 2,
-    email,
-    nombre: rol === 'admin' ? 'Administrador' : 'Usuario',
-    apellido: rol === 'admin' ? 'Master' : 'Invitado',
-    rol,
-    fechaCreacion: new Date().toISOString()
-  };
+  login(email: string, password: string, rol: Rol): boolean {
+    this.usuarioActual = {
+      id: email === 'admin@mail.com' ? 1 : 2,
+      email,
+      nombre: rol === 'admin' ? 'Administrador' : 'Usuario',
+      apellido: rol === 'admin' ? 'Master' : 'Invitado',
+      rol,
+      fechaCreacion: new Date().toISOString()
+    };
 
-  this.updateLocalStorage();
-  return true;
-}
-
-
-
+    this.updateLocalStorage();
+    return true;
+  }
 
   logout(): void {
     this.usuarioActual = null;
