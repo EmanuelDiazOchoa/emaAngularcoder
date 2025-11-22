@@ -3,14 +3,22 @@ import { rolGuard } from './core/guards/rol.guard';
 
 export const routes: Routes = [
 
-  // Home -> redirige a alumnos
+  
   {
     path: '',
-    redirectTo: 'alumnos',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
 
-  // Alumnos (admin y user)
+  
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./auth/login/login.component')
+        .then(m => m.LoginComponent)
+  },
+
+  
   {
     path: 'alumnos',
     loadChildren: () =>
@@ -18,7 +26,7 @@ export const routes: Routes = [
         .then(m => m.ALUMNOS_ROUTES)
   },
 
-  // Cursos (admin y user)
+  
   {
     path: 'cursos',
     loadChildren: () =>
@@ -26,17 +34,17 @@ export const routes: Routes = [
         .then(m => m.CURSOS_ROUTES)
   },
 
-  // Usuarios (solo admin)
+  
   {
     path: 'usuarios',
-    canMatch: [rolGuard],
-    data: { rol: 'admin' },
+    canMatch: [rolGuard],       
+    data: { rol: 'admin' },      
     loadChildren: () =>
       import('./features/usuarios/usuarios.routes')
         .then(m => m.USUARIOS_ROUTES)
   },
 
-  // Inscripciones (admin y user)
+  
   {
     path: 'inscripciones',
     loadChildren: () =>
@@ -44,10 +52,10 @@ export const routes: Routes = [
         .then(m => m.INSCRIPCIONES_ROUTES)
   },
 
-  // Wildcard (ruta inexistente)
+  
   {
     path: '**',
-    redirectTo: 'alumnos'
+    redirectTo: 'login'
   }
 
 ];

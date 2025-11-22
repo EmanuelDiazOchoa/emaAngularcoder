@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="toggleSidenav.emit()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <span>Gestión de Alumnos</span>
+  <span class="spacer"></span>
+
+  <button mat-button routerLink="/alumnos" *ngIf="auth.isLogged()">Inicio</button>
+  <button mat-button routerLink="/institucion">Institución</button>
+
+  <button mat-button *ngIf="auth.isLogged()" (click)="logout()">Cerrar Sesión</button>
+  <button mat-button color="accent" routerLink="/login" *ngIf="!auth.isLogged()">Login</button>
+</mat-toolbar>

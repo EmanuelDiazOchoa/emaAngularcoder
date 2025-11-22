@@ -26,31 +26,20 @@ export class AuthService {
     }
   }
 
-login(email: string, password: string): boolean {
-
-  if (email === 'admin@mail.com') {
-    this.usuarioActual = {
-      id: 1,
-      email,
-      nombre: 'Administrador',
-      apellido: 'Master',
-      rol: 'admin',
-      fechaCreacion: new Date().toISOString()  // 👈 AGREGADO
-    };
-  } else {
-    this.usuarioActual = {
-      id: 2,
-      email,
-      nombre: 'Usuario',
-      apellido: 'Invitado',
-      rol: 'user',
-      fechaCreacion: new Date().toISOString()  // 👈 AGREGADO
-    };
-  }
+login(email: string, password: string, rol: Rol): boolean {
+  this.usuarioActual = {
+    id: email === 'admin@mail.com' ? 1 : 2,
+    email,
+    nombre: rol === 'admin' ? 'Administrador' : 'Usuario',
+    apellido: rol === 'admin' ? 'Master' : 'Invitado',
+    rol,
+    fechaCreacion: new Date().toISOString()
+  };
 
   this.updateLocalStorage();
   return true;
 }
+
 
 
 

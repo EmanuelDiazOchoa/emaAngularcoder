@@ -1,5 +1,18 @@
-<mat-nav-list>
-  <a mat-list-item routerLink="/alumnos">Lista de Alumnos</a>
-  <a mat-list-item routerLink="/abm-alumnos">ABM Alumnos</a>
-  <a mat-list-item routerLink="/inscripciones">Inscripciones</a>
-</mat-nav-list>
+<nav>
+  <ul>
+
+    <li><a routerLink="/alumnos">Alumnos</a></li>
+
+    
+    <li><a routerLink="/cursos">Cursos</a></li>
+
+    
+    <li><a routerLink="/inscripciones">Inscripciones</a></li>
+
+   <li *ngIf="auth.isAdmin()">
+  <a routerLink="/usuarios">Usuarios</a>
+  </li>
+
+  </ul>
+</nav>
+

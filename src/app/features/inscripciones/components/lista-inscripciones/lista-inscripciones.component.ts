@@ -1,70 +1,61 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../../core/services/auth.service';
 import { InscripcionesService } from '../../services/inscripciones.service';
-import { Observable } from 'rxjs';
-import { Inscripcion } from '../../../../core/models/inscripcion.model';
-import { CursoService } from '../../../cursos/service/curso.service';
 import { UsuariosService } from '../../../../core/services/usuario.service';
+import { CursoService } from '../../../cursos/service/curso.service';
+import { Inscripcion } from '../../../../core/models/inscripcion.model';
 
 @Component({
   selector: 'app-lista-inscripciones',
   standalone: true,
   imports: [CommonModule],
-  template: `
-  <div class="container mt-4">
-    <h2>📋 Lista de Inscripciones</h2>
-
-    <table class="table table-striped mt-3">
-      <thead>
-        <tr>
-          <th>Usuario</th>
-          <th>Curso</th>
-          <th>Fecha</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let i of inscripciones$ | async">
-          <td>{{ obtenerNombreUsuario(i.usuarioId) }}</td>
-          <td>{{ obtenerNombreCurso(i.cursoId) }}</td>
-          <td>{{ i.fecha | date:'short' }}</td>
-          <td>
-            <button class="btn btn-danger btn-sm" (click)="eliminar(i.id)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  `
+  templateUrl: './lista-inscripciones.component.html'
 })
-export class ListaInscripcionesComponent {
-  inscripciones$: Observable<Inscripcion[]>;
+export class ListaInscripcionesComponent implements OnInit {
+
+  inscripciones: Inscripcion[] = [];
+  usuarios: any[] = [];
+  cursos: any[] = [];
 
   constructor(
     private inscripcionesService: InscripcionesService,
-    private cursosService: CursoService,
     private usuariosService: UsuariosService,
-  ) {
-    this.inscripciones$ = this.inscripcionesService.obtenerInscripciones();
+    private cursosService: CursoService,
+    public auth: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    this.usuariosService.getUsuarios().subscribe(u => this.usuarios = u);
+    this.cursosService.obtenerCursos().subscribe(c => this.cursos = c);
+
+    this.inscripcionesService.obtenerInscripciones().subscribe(list => {
+      const user = this.auth.getUsuarioActual();
+      this.inscripciones = this.auth.isAdmin() ? list : list.filter(i => i.usuarioId === user?.id);
+    });
   }
 
-  eliminar(id: number) {
+  // 👉 Solo Admin puede eliminar
+  eliminar(id: number): void {
+    if (!this.auth.isAdmin()) return;
     this.inscripcionesService.eliminar(id);
-
   }
 
-  // 🔥 KEY FIX: tipo number, no string
-  obtenerNombreUsuario(id?: number): string {
-    if (!id) return 'Desconocido';
-    const u = this.usuariosService.getByIdSync(id);
-    return u ? `${u.nombre} ${u.apellido ?? ''}`.trim() : 'Desconocido';
+  // 👉 Obtener nombre del usuario
+  getUsuarioNombre(usuarioId: number): string {
+    const user = this.usuarios.find(u => u.id === usuarioId);
+    return user ? `${user.nombre} ${user.apellido}` : 'Usuario desconocido';
   }
 
-  // 🔥 KEY FIX: tipo number, no string
-  obtenerNombreCurso(id?: number): string {
-    if (!id) return 'Desconocido';
-    const c = this.cursosService.obtenerCursoPorId(id);
-    return c?.nombre ?? 'Desconocido';
+  // 👉 Obtener nombre del curso
+  getCursoNombre(cursoId: number): string {
+    const curso = this.cursos.find(c => c.id === cursoId);
+    return curso ? curso.nombre : 'Curso desconocido';
+  }
+
+  // 👉 Botón NUEVA inscripción (solo admin o usuario para sí mismo)
+  nuevaInscripcion(): void {
+    // Aquí puedes abrir un modal o navegar a la vista nueva inscripción
+    console.log('Crear nueva inscripción');
   }
 }

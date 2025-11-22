@@ -1,0 +1,29 @@
+<div class="container mt-4">
+  <h2>📋 Lista de Inscripciones</h2>
+
+  <button class="btn btn-primary mt-2" (click)="nuevaInscripcion()">
+    ➕ Nueva Inscripción
+  </button>
+
+  <table class="table table-striped mt-3">
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Curso</th>
+        <th>Fecha</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let i of inscripciones">
+        <td>{{ getUsuarioNombre(i.usuarioId) }}</td>
+        <td>{{ getCursoNombre(i.cursoId) }}</td>
+        <td>{{ i.fecha | date:'short' }}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" (click)="eliminar(i.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

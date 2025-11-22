@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
-import { MatListModule } from '@angular/material/list';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common'; 
+import { AuthService } from '../../services/auth.service';
+import { RouterModule } from '@angular/router'; 
 
 @Component({
   selector: 'app-sidebar',
-  standalone: true,
-  imports: [MatListModule, RouterModule],
   templateUrl: './sidebar.html',
-  styleUrls: ['./sidebar.scss']
+  styleUrls: ['./sidebar.scss'],
+  standalone: true, 
+  imports: [CommonModule, RouterModule] 
 })
 export class SidebarComponent {
+
+  constructor(public auth: AuthService) {}
 
 }

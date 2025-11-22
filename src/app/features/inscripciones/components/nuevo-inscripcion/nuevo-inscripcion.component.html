@@ -1,23 +1,22 @@
 <div class="container mt-4">
-  <h2>📝 Nueva Inscripción</h2>
-
-  <div class="mt-3">
-    <label class="form-label">Usuario</label>
-    <select class="form-select" [(ngModel)]="usuarioSeleccionado">
-      <option [value]="u.id" *ngFor="let u of usuarios$ | async">
-        {{ u.nombre }} {{ u.apellido }}
+  <h2>➕ Nueva Inscripción</h2>
+  <div class="mb-3" *ngIf="auth.isAdmin()">
+    <label>Usuario</label>
+    <select class="form-control" [(ngModel)]="usuarioSeleccionado">
+      <option *ngFor="let u of usuarios$ | async" [value]="u.id">
+        {{ u.nombre }}
       </option>
     </select>
   </div>
 
-  <div class="mt-3">
-    <label class="form-label">Curso</label>
-    <select class="form-select" [(ngModel)]="cursoSeleccionado">
-      <option [value]="c.id" *ngFor="let c of cursos$ | async">
+  <div class="mb-3">
+    <label>Curso</label>
+    <select class="form-control" [(ngModel)]="cursoSeleccionado">
+      <option *ngFor="let c of cursos$ | async" [value]="c.id">
         {{ c.nombre }}
       </option>
     </select>
   </div>
 
-  <button (click)="guardar()" class="btn btn-success mt-3">Guardar</button>
+  <button class="btn btn-success" (click)="guardar()">Guardar</button>
 </div>
