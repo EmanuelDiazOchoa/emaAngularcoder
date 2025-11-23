@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
 import { rolGuard } from './core/guards/rol.guard';
 
 export const routes: Routes = [
-
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
   {
@@ -10,11 +10,28 @@ export const routes: Routes = [
     loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent)
   },
 
+  
   {
     path: 'alumnos',
+    canMatch: [authGuard],
     loadChildren: () => import('./features/alumnos/alumnos.routes').then(m => m.ALUMNOS_ROUTES)
   },
 
+  
+  {
+    path: 'cursos',
+    canMatch: [authGuard],
+    loadChildren: () => import('./features/cursos/cursos.routes').then(m => m.CURSOS_ROUTES)
+  },
+
+  
+  {
+    path: 'inscripciones',
+    canMatch: [authGuard],
+    loadChildren: () => import('./features/inscripciones/inscripciones.routes').then(m => m.INSCRIPCIONES_ROUTES)
+  },
+
+  
   {
     path: 'usuarios',
     canMatch: [rolGuard],
