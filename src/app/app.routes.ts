@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
-import { rolGuard } from './core/guards/rol.guard';
+import { RolGuard } from './core/guards/rol.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -34,7 +34,7 @@ export const routes: Routes = [
   
   {
     path: 'usuarios',
-    canMatch: [rolGuard],
+    canMatch: [RolGuard],
     data: { rol: 'admin' },
     loadChildren: () => import('./features/usuarios/usuarios.routes').then(m => m.USUARIOS_ROUTES)
   },

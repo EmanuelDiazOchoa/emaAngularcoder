@@ -5,16 +5,30 @@
 
   <span>Gestión de Alumnos</span>
 
-  <span class="usuario" *ngIf="auth.isLogged()">
-    {{ auth.getUsuarioActual()?.nombre }} ({{ auth.getRol() }})
+  
+  <span class="usuario" *ngIf="user$ | async as user">
+    {{ user.nombre }} ({{ user.rol }})
   </span>
 
   <span class="spacer"></span>
 
-  <button mat-button routerLink="/alumnos" *ngIf="auth.isLogged()">Inicio</button>
+  
+  <button mat-button routerLink="/alumnos" *ngIf="user$ | async">
+    Inicio
+  </button>
 
-  <button mat-button routerLink="/usuarios" *ngIf="auth.isAdmin()">Usuarios</button>
+  
+  <button mat-button routerLink="/usuarios" *ngIf="(user$ | async)?.rol === 'admin'">
+    Usuarios
+  </button>
 
-  <button mat-button *ngIf="auth.isLogged()" (click)="logout()">Cerrar Sesión</button>
-  <button mat-button color="accent" routerLink="/login" *ngIf="!auth.isLogged()">Login</button>
+  
+  <button mat-button *ngIf="user$ | async" (click)="logout()">
+    Cerrar Sesión
+  </button>
+
+  
+  <button mat-button color="accent" routerLink="/login" *ngIf="!(user$ | async)">
+    Login
+  </button>
 </mat-toolbar>

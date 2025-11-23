@@ -1,34 +1,46 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router'; 
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { map, Observable } from 'rxjs';
+import { logout } from '../../../store/auth/auth.actions';
+import { AuthState } from '../../../store/auth/auth.models';
+
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from '../../services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule, 
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule
-  ],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.css'],
+  imports: [
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    NgIf
+  ]
 })
 export class NavbarComponent {
   @Output() toggleSidenav = new EventEmitter<void>();
 
-  constructor(
-    public auth: AuthService,
-    private router: Router
-  ) {}
+  user$!: Observable<any>;
+
+  constructor(private store: Store<{ auth: AuthState }>, private router: Router) {
+    this.user$ = this.store.select('auth').pipe(map(state => state.user));
+  }
+
+  isLogged(): Observable<boolean> {
+    return this.store.select('auth').pipe(map(state => !!state.user));
+  }
+
+  isAdmin(): Observable<boolean> {
+    return this.store.select('auth').pipe(map(state => state.user?.rol === 'admin'));
+  }
 
   logout() {
-    this.auth.logout();
+    this.store.dispatch(logout());
     this.router.navigate(['/login']);
   }
 }

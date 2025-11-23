@@ -1,31 +1,30 @@
+import { Injectable } from '@angular/core';
+import { CanMatch, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { firstValueFrom } from 'rxjs';
+import { selectIsLogged, selectIsAdmin } from '../../store/auth/auth.selectors';
 
-import { inject } from '@angular/core';
-import { CanMatchFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+@Injectable({
+  providedIn: 'root'
+})
+export class RolGuard implements CanMatch {
 
-export const rolGuard: CanMatchFn = (route, segments) => {
-  const auth = inject(AuthService);
-  const router = inject(Router);
+  constructor(private store: Store, private router: Router) {}
 
-  const requiredRol = route.data?.['rol'] as string | undefined;
+  async canMatch() {
+    const logged = await firstValueFrom(this.store.select(selectIsLogged));
+    const isAdmin = await firstValueFrom(this.store.select(selectIsAdmin));
 
-  
-  if (!auth.isLogged()) {
-    router.navigate(['/login']);
-    return false;
-  }
+    if (!logged) {
+      this.router.navigate(['/login']);
+      return false;
+    }
 
-  
-  if (!requiredRol) {
+    if (!isAdmin) {
+      this.router.navigate(['/forbidden']);
+      return false;
+    }
+
     return true;
   }
-
-  
-  if (auth.getRol() === requiredRol) {
-    return true;
-  }
-
-  
-  router.navigate(['/forbidden']);
-  return false;
-};
+}
