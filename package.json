@@ -2,11 +2,10 @@
   "name": "emaangularcoder",
   "version": "0.0.0",
   "scripts": {
-  "start": "ng serve",
-  "build": "ng build",
-  "json-server": "json-server --watch db.json --port 3000"
-}
-,
+    "start": "ng serve",
+    "build": "ng build",
+    "json-server": "json-server --watch db.json --port 3000"
+  },
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
@@ -36,7 +35,8 @@
     "@ngrx/store-devtools": "^20.1.0",
     "bootstrap": "^5.3.8",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zone.js": "^0.15.1"
   },
   "devDependencies": {
     "@angular/build": "^20.3.5",

@@ -1,3 +1,4 @@
+import 'zone.js';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app';
 import { provideRouter } from '@angular/router';
@@ -11,7 +12,7 @@ import { AuthEffects } from './app/store/auth/auth.effects';
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(),             
     provideStore({ auth: authReducer }),
     provideEffects([AuthEffects])
   ]

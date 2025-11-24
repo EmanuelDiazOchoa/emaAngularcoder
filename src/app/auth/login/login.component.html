@@ -1,29 +1,17 @@
-<div class="login-wrapper">
-  <mat-card class="login-card">
-    <h1 class="title">Bienvenido 👋</h1>
+<mat-card>
+  <form [formGroup]="form" (ngSubmit)="ingresar()">
 
-    <form [formGroup]="form" (ngSubmit)="ingresar()">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" placeholder="ej: usuario@mail.com">
-      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Contraseña</mat-label>
-        <input matInput formControlName="password" type="password" placeholder="********">
-      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" type="password" />
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Rol</mat-label>
-        <mat-select formControlName="rol">
-          <mat-option value="admin">Administrador</mat-option>
-          <mat-option value="user">Usuario</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Ingresar</button>
+  </form>
+</mat-card>
 
-      <button mat-raised-button color="primary" class="btn-login" type="submit">
-        Ingresar
-      </button>
-    </form>
-  </mat-card>
-</div>

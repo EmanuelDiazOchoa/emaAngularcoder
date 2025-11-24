@@ -1,34 +1,23 @@
 <mat-toolbar color="primary">
+
   <button mat-icon-button (click)="toggleSidenav.emit()">
     <mat-icon>menu</mat-icon>
   </button>
 
   <span>Gestión de Alumnos</span>
 
-  
   <span class="usuario" *ngIf="user$ | async as user">
     {{ user.nombre }} ({{ user.rol }})
   </span>
 
   <span class="spacer"></span>
 
-  
-  <button mat-button routerLink="/alumnos" *ngIf="user$ | async">
-    Inicio
-  </button>
+  <button mat-button routerLink="/alumnos" *ngIf="isLogged$ | async">Inicio</button>
 
-  
-  <button mat-button routerLink="/usuarios" *ngIf="(user$ | async)?.rol === 'admin'">
-    Usuarios
-  </button>
+  <button mat-button routerLink="/usuarios" *ngIf="isAdmin$ | async">Usuarios</button>
 
-  
-  <button mat-button *ngIf="user$ | async" (click)="logout()">
-    Cerrar Sesión
-  </button>
+  <button mat-button *ngIf="isLogged$ | async" (click)="logout()">Cerrar Sesión</button>
 
-  
-  <button mat-button color="accent" routerLink="/login" *ngIf="!(user$ | async)">
-    Login
-  </button>
+  <button mat-button color="accent" routerLink="/login" *ngIf="!(isLogged$ | async)">Login</button>
+
 </mat-toolbar>

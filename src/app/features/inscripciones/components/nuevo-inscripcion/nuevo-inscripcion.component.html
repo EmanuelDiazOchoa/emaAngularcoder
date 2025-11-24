@@ -1,6 +1,7 @@
 <div class="container mt-4">
   <h2>➕ Nueva Inscripción</h2>
-  <div class="mb-3" *ngIf="auth.isAdmin()">
+
+  <div class="mb-3" *ngIf="esAdmin$ | async">
     <label>Usuario</label>
     <select class="form-control" [(ngModel)]="usuarioSeleccionado">
       <option *ngFor="let u of usuarios$ | async" [value]="u.id">

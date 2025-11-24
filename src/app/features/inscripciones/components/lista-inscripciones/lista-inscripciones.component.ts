@@ -53,9 +53,9 @@ export class ListaInscripcionesComponent implements OnInit {
     return curso ? curso.nombre : 'Curso desconocido';
   }
 
-  // 👉 Botón NUEVA inscripción (solo admin o usuario para sí mismo)
   nuevaInscripcion(): void {
-    // Aquí puedes abrir un modal o navegar a la vista nueva inscripción
-    console.log('Crear nueva inscripción');
-  }
+  // Aquí deberías abrir modal o navegar, pero sin console.log
+  alert('Función no implementada');
+}
+
 }

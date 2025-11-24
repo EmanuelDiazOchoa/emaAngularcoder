@@ -1,44 +1,62 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
 import { Store } from '@ngrx/store';
-import { loginSuccess } from '../../store/auth/auth.actions'; 
+import * as AuthActions from '../../store/auth/auth.actions';
+import { AuthService } from '../../core/services/auth.service';
+
+// Angular Material UI
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  loginForm: FormGroup;
-  errorMsg: string = '';
+
+  form!: FormGroup; // 👈 ya no se inicializa aquí arriba
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService,
-    private router: Router,
-    private store: Store
+    private store: Store,
+    private authService: AuthService,
+    private router: Router
   ) {
-    this.loginForm = this.fb.group({
+    // 👇 Ahora sí: inicializamos el formulario en el constructor
+    this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', [Validators.required]],
     });
   }
 
-  onSubmit() {
-    if (this.loginForm.invalid) return;
+  ingresar() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-    const { email, password } = this.loginForm.value;
+    const { email, password } = this.form.value;
 
-    this.auth.login(email, password).subscribe(user => {
+    this.authService.login(email!, password!).subscribe(user => {
       if (user) {
-        this.store.dispatch(loginSuccess({ user }));
-        this.router.navigate(['/']); 
+        this.store.dispatch(AuthActions.loginSuccess({ user }));
+        this.router.navigate(['/dashboard']);
       } else {
-        this.errorMsg = 'Usuario o contraseña incorrectos';
+        alert('Credenciales inválidas');
       }
     });
   }
 }
-
