@@ -6,14 +6,18 @@ import { routes } from './app/app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { authReducer } from './app/store/auth/auth.reducer';
 import { AuthEffects } from './app/store/auth/auth.effects';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),             
+    provideHttpClient(),               
+    provideAnimationsAsync(),
     provideStore({ auth: authReducer }),
-    provideEffects([AuthEffects])
+    provideEffects([AuthEffects]),
+    provideStoreDevtools({ maxAge: 25 })  
   ]
-});
+}).catch(err => console.error(err));

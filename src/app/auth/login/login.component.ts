@@ -5,12 +5,11 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../store/auth/auth.actions';
 import { AuthService } from '../../core/services/auth.service';
-
-// Angular Material UI
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -22,20 +21,22 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSnackBarModule
   ],
   templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
 
-  form!: FormGroup; // 👈 ya no se inicializa aquí arriba
+  form!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private store: Store,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
-    // 👇 Ahora sí: inicializamos el formulario en el constructor
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -45,6 +46,9 @@ export class LoginComponent {
   ingresar() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.snackBar.open('Por favor completa todos los campos correctamente', 'Cerrar', {
+        duration: 3000
+      });
       return;
     }
 
@@ -53,9 +57,15 @@ export class LoginComponent {
     this.authService.login(email!, password!).subscribe(user => {
       if (user) {
         this.store.dispatch(AuthActions.loginSuccess({ user }));
-        this.router.navigate(['/dashboard']);
+        this.snackBar.open(`Bienvenido ${user.nombre}!`, 'Cerrar', {
+          duration: 2000
+        });
+        
+        this.router.navigate(['/alumnos']);
       } else {
-        alert('Credenciales inválidas');
+        this.snackBar.open('Credenciales inválidas. Intenta con admin@test.com / admin123', 'Cerrar', {
+          duration: 4000
+        });
       }
     });
   }

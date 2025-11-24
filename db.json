@@ -2,20 +2,99 @@
   "users": [
     {
       "id": 1,
-      "email": "admin@coder.com",
-      "password": "123456",
-      "nombre": "Administrador",
-      "rol": "admin"
+      "nombre": "Admin",
+      "apellido": "Principal",
+      "email": "admin@test.com",
+      "password": "admin123",
+      "rol": "admin",
+      "fechaCreacion": "2024-01-01T00:00:00.000Z"
     },
     {
       "id": 2,
-      "email": "user@coder.com",
-      "password": "123456",
-      "nombre": "Usuario Normal",
-      "rol": "user"
+      "nombre": "Usuario",
+      "apellido": "Normal",
+      "email": "user@test.com",
+      "password": "user123",
+      "rol": "user",
+      "fechaCreacion": "2024-01-15T00:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "nombre": "María",
+      "apellido": "López",
+      "email": "maria@test.com",
+      "password": "maria123",
+      "rol": "user",
+      "fechaCreacion": "2024-02-01T00:00:00.000Z"
     }
   ],
-  "alumnos": [],
-  "cursos": [],
-  "inscripciones": []
+  "alumnos": [
+    {
+      "id": 1,
+      "nombre": "Juan",
+      "apellido": "Pérez",
+      "email": "juan.perez@example.com",
+      "fechaInscripcion": "2024-01-10"
+    },
+    {
+      "id": 2,
+      "nombre": "María",
+      "apellido": "Gómez",
+      "email": "maria.gomez@example.com",
+      "fechaInscripcion": "2024-02-20"
+    },
+    {
+      "id": 3,
+      "nombre": "Carlos",
+      "apellido": "Rodríguez",
+      "email": "carlos.rodriguez@example.com",
+      "fechaInscripcion": "2024-03-15"
+    }
+  ],
+  "cursos": [
+    {
+      "id": 1,
+      "nombre": "Angular Básico",
+      "descripcion": "Introducción a Angular y TypeScript",
+      "duracion": "8 semanas",
+      "fechaInicio": "2024-01-15",
+      "fechaFin": "2024-03-10"
+    },
+    {
+      "id": 2,
+      "nombre": "React Avanzado",
+      "descripcion": "React Hooks, Context API y Redux",
+      "duracion": "6 semanas",
+      "fechaInicio": "2024-02-01",
+      "fechaFin": "2024-03-15"
+    },
+    {
+      "id": 3,
+      "nombre": "Node.js y Express",
+      "descripcion": "Desarrollo de APIs REST con Node.js",
+      "duracion": "10 semanas",
+      "fechaInicio": "2024-03-01",
+      "fechaFin": "2024-05-10"
+    }
+  ],
+  "inscripciones": [
+    {
+      "id": 1,
+      "usuarioId": 1,
+      "cursoId": 1,
+      "fecha": "2024-01-10T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "usuarioId": 2,
+      "cursoId": 1,
+      "fecha": "2024-01-12T14:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "usuarioId": 2,
+      "cursoId": 2,
+      "fecha": "2024-02-01T09:00:00.000Z"
+    }
+  ]
 }
