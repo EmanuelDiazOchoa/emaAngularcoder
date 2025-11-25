@@ -5,6 +5,7 @@ import { InscripcionesService } from '../../services/inscripciones.service';
 import { UsuariosService } from '../../../../core/services/usuario.service';
 import { CursoService } from '../../../cursos/service/curso.service';
 import { Inscripcion } from '../../../../core/models/inscripcion.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lista-inscripciones',
@@ -22,6 +23,7 @@ export class ListaInscripcionesComponent implements OnInit {
     private inscripcionesService: InscripcionesService,
     private usuariosService: UsuariosService,
     private cursosService: CursoService,
+    private router: Router,
     public auth: AuthService
   ) {}
 
@@ -54,8 +56,8 @@ export class ListaInscripcionesComponent implements OnInit {
   }
 
   nuevaInscripcion(): void {
-  // Aquí deberías abrir modal o navegar, pero sin console.log
-  alert('Función no implementada');
-}
+    // Navegar a la ruta de nueva inscripción (ajusta la ruta según tu app)
+    this.router.navigate(['/inscripciones/nueva']);
+  }
 
 }

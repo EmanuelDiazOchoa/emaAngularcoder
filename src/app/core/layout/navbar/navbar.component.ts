@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
 import { logout } from '../../../store/auth/auth.actions';
@@ -18,6 +19,7 @@ import { NgIf, AsyncPipe } from '@angular/common';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
+    RouterModule,
     NgIf,
     AsyncPipe
   ]

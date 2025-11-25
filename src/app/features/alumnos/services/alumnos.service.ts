@@ -7,32 +7,13 @@ import { Alumno } from '../../../core/models/alumnos.model';
 })
 export class AlumnosService {
 
-  private alumnos: Alumno[] = [];
-  private alumnos$ = new BehaviorSubject<Alumno[]>([]);
-  private readonly localStorageKey = 'alumnos';
+  private alumnos: Alumno[] = [
+    { id: 1, nombre: 'Juan', apellido: 'Perez', email: 'juan.perez@example.com', fechaInscripcion: '2024-01-10' },
+    { id: 2, nombre: 'Maria', apellido: 'Gomez', email: 'maria.gomez@example.com', fechaInscripcion: '2024-02-20' }
+  ];
+  private alumnos$ = new BehaviorSubject<Alumno[]>(this.alumnos);
 
-  constructor() {
-    this.loadAlumnosFromLocalStorage();
-  }
-
-  private loadAlumnosFromLocalStorage(): void {
-  const storedAlumnos = localStorage.getItem(this.localStorageKey);
-
-  if (storedAlumnos) {
-    this.alumnos = JSON.parse(storedAlumnos);
-  } else {
-    this.alumnos = [
-      { id: 1, nombre: 'Juan', apellido: 'Perez', email: 'juan.perez@example.com', fechaInscripcion: '2024-01-10' },
-      { id: 2, nombre: 'Maria', apellido: 'Gomez', email: 'maria.gomez@example.com', fechaInscripcion: '2024-02-20' }
-    ];
-  }
-  this.alumnos$.next(this.alumnos);
-}
-
-
-  private updateLocalStorage(): void {
-    localStorage.setItem(this.localStorageKey, JSON.stringify(this.alumnos));
-  }
+  constructor() {}
 
   getAlumnos(): Observable<Alumno[]> {
     return this.alumnos$.asObservable();
@@ -43,12 +24,10 @@ export class AlumnosService {
     const newAlumno: Alumno = { ...alumno, id: newId };
     this.alumnos = [...this.alumnos, newAlumno];
     this.alumnos$.next(this.alumnos);
-    this.updateLocalStorage();
   }
 
   deleteAlumno(id: number): void {
     this.alumnos = this.alumnos.filter(a => a.id !== id);
     this.alumnos$.next(this.alumnos);
-    this.updateLocalStorage();
   }
 }

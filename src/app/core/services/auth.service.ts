@@ -9,7 +9,7 @@ import { Usuario } from '../../store/auth/auth.models';
 })
 export class AuthService {
   private apiURL = 'http://localhost:3000/users';
-  private storageKey = 'ema_token_user';
+  private storageKey = 'user';
 
   constructor(private http: HttpClient) {}
 
@@ -20,32 +20,31 @@ export class AuthService {
         map(users => users.find(u => u.password === password) ?? null),
         tap(user => {
           if (user) {
-            localStorage.setItem(this.storageKey, JSON.stringify(user));
+            sessionStorage.setItem(this.storageKey, JSON.stringify(user));
           }
         })
       );
   }
 
   logout(): void {
-    localStorage.removeItem(this.storageKey);
+    sessionStorage.removeItem(this.storageKey);
   }
 
   isLogged(): boolean {
-    return !!localStorage.getItem(this.storageKey);
+    return !!sessionStorage.getItem(this.storageKey);
   }
 
   getCurrentUser(): Usuario | null {
-    const raw = localStorage.getItem(this.storageKey);
+    const raw = sessionStorage.getItem(this.storageKey);
     return raw ? JSON.parse(raw) : null;
   }
 
   isAdmin(): boolean {
-  const user = this.getCurrentUser();
-  return user?.rol === 'admin';
-}
+    const user = this.getCurrentUser();
+    return user?.rol === 'admin';
+  }
 
-getUsuarioActual() {
-  return this.getCurrentUser();
-}
-
+  getUsuarioActual() {
+    return this.getCurrentUser();
+  }
 }
