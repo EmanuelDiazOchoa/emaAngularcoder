@@ -9,15 +9,15 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { authReducer } from './app/store/auth/auth.reducer';
 import { AuthEffects } from './app/store/auth/auth.effects';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideHttpClient(),              
     provideRouter(routes),
-    provideHttpClient(),               
-    provideAnimationsAsync(),
     provideStore({ auth: authReducer }),
     provideEffects([AuthEffects]),
-    provideStoreDevtools({ maxAge: 25 })  
+    provideStoreDevtools({ maxAge: 25 })
   ]
 }).catch(err => console.error(err));
+
