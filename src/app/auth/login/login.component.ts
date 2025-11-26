@@ -61,7 +61,7 @@ export class LoginComponent {
           duration: 2000
         });
         
-        this.router.navigate(['/alumnos']);
+        this.router.navigate(['/dashboard/alumnos']);
       } else {
         this.snackBar.open('Credenciales inválidas. Intenta con admin@test.com / admin123', 'Cerrar', {
           duration: 4000

@@ -1,17 +1,17 @@
 <nav>
   <ul>
 
-    <li><a routerLink="/alumnos">Alumnos</a></li>
+    <li><a routerLink="/dashboard/alumnos">Alumnos</a></li>
 
     
-    <li><a routerLink="/cursos">Cursos</a></li>
+    <li><a routerLink="/dashboard/cursos">Cursos</a></li>
 
     
-    <li><a routerLink="/inscripciones">Inscripciones</a></li>
+    <li><a routerLink="/dashboard/inscripciones">Inscripciones</a></li>
 
    <li *ngIf="auth.isAdmin()">
-  <a routerLink="/usuarios">Usuarios</a>
-  </li>
+     <a routerLink="/dashboard/usuarios">Usuarios</a>
+   </li>
 
   </ul>
 </nav>

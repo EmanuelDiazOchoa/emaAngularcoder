@@ -12,9 +12,9 @@
 
   <span class="spacer"></span>
 
-  <button mat-button routerLink="/alumnos" *ngIf="isLogged$ | async">Inicio</button>
+  <button mat-button routerLink="/dashboard/alumnos" routerLinkActive="active" *ngIf="isLogged$ | async">Inicio</button>
 
-  <button mat-button routerLink="/usuarios" *ngIf="isAdmin$ | async">Usuarios</button>
+  <button mat-button routerLink="/dashboard/usuarios" routerLinkActive="active" *ngIf="isAdmin$ | async">Usuarios</button>
 
   <button mat-button *ngIf="isLogged$ | async" (click)="logout()">Cerrar Sesión</button>
 
