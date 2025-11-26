@@ -9,49 +9,123 @@
 }
 
 .login-card {
-  width: 370px;
-  padding: 25px 30px;
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
   border-radius: 16px;
   backdrop-filter: blur(18px);
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.22);
   color: white;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
   animation: fadeIn 0.6s ease-in-out;
 }
 
 .title {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   font-weight: 700;
   color: #ffffff;
-  font-size: 26px;
+  font-size: 28px;
+  letter-spacing: 0.5px;
 }
 
 .full-width {
   width: 100%;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+
+  // Estilos para inputs de Material
+  mat-form-field {
+    width: 100%;
+    color: white;
+  }
+
+  // Texto del input
+  ::ng-deep .mat-mdc-input-element {
+    color: rgba(255, 255, 255, 0.9) !important;
+    caret-color: white !important;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  // Fondo del input
+  ::ng-deep .mdc-text-field {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px !important;
+  }
+
+  // Label del input
+  ::ng-deep .mdc-floating-label {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  // Estado focused
+  ::ng-deep .mdc-text-field--focused {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  // Error state
+  ::ng-deep .mat-mdc-form-field-error {
+    color: #ff6b6b !important;
+    font-size: 12px;
+  }
 }
 
 .btn-login {
   width: 100%;
-  padding: 10px;
-  font-size: 17px;
+  padding: 12px;
+  font-size: 16px;
   border-radius: 8px;
-  font-weight: bold;
-  transition: transform 0.2s ease-in-out;
-}
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(90deg, #4a7fd7, #2e5090);
+  border: none;
+  color: white;
+  cursor: pointer;
 
-.btn-login:hover {
-  transform: scale(1.03);
-}
+  &:hover:not(:disabled) {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(82, 119, 221, 0.4);
+    background: linear-gradient(90deg, #5589e8, #3a5fa6);
+  }
 
-::ng-deep .mat-mdc-text-field-wrapper {
-  background-color: rgba(255, 255, 255, 0.10) !important;
-  border-radius: 10px !important;
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Media query para dispositivos pequeños
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 20px;
+    border-radius: 12px;
+  }
+
+  .title {
+    font-size: 24px;
+    margin-bottom: 25px;
+  }
+
+  .btn-login {
+    padding: 10px;
+    font-size: 15px;
+  }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'; 
 import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Inscripcion } from '../../../core/models/inscripcion.model';
 
 @Injectable({
@@ -10,6 +11,8 @@ export class InscripcionesService {
   private inscripciones: Inscripcion[] = [];
 
   private inscripciones$ = new BehaviorSubject<Inscripcion[]>(this.inscripciones);
+
+  constructor(private http: HttpClient) {}
 
   // Obtener todas
   obtenerInscripciones(): Observable<Inscripcion[]> {
@@ -28,8 +31,7 @@ export class InscripcionesService {
   }
 
   // Eliminar inscripción
-  eliminar(id: number) {
-    this.inscripciones = this.inscripciones.filter(i => i.id !== id);
-    this.inscripciones$.next(this.inscripciones);
+  eliminar(id: number): Observable<void> {
+    return this.http.delete<void>(`/api/inscripciones/${id}`);
   }
 }

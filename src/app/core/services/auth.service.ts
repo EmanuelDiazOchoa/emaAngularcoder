@@ -1,50 +1,57 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { Usuario } from '../../store/auth/auth.models';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiURL = 'http://localhost:3000/users';
-  private storageKey = 'user';
+  private usuarioActual$ = new BehaviorSubject<any>(null);
+  private tokenKey = 'auth_token';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.cargarUsuarioGuardado();
+  }
 
-  login(email: string, password: string): Observable<Usuario | null> {
-    return this.http
-      .get<Usuario[]>(`${this.apiURL}?email=${email}`)
-      .pipe(
-        map(users => users.find(u => u.password === password) ?? null),
-        tap(user => {
-          if (user) {
-            sessionStorage.setItem(this.storageKey, JSON.stringify(user));
-          }
-        })
-      );
+  login(email: string, password: string): Observable<any> {
+    return this.http.post('/api/auth/login', { email, password }).pipe(
+      tap((response: any) => {
+        if (response && response.token) {
+          localStorage.setItem(this.tokenKey, response.token);
+          this.usuarioActual$.next(response.user);
+        }
+      })
+    );
   }
 
   logout(): void {
-    sessionStorage.removeItem(this.storageKey);
+    localStorage.removeItem(this.tokenKey);
+    this.usuarioActual$.next(null);
   }
 
   isLogged(): boolean {
-    return !!sessionStorage.getItem(this.storageKey);
+    return !!localStorage.getItem(this.tokenKey);
   }
 
-  getCurrentUser(): Usuario | null {
-    const raw = sessionStorage.getItem(this.storageKey);
-    return raw ? JSON.parse(raw) : null;
+  getUsuarioActual(): any {
+    return this.usuarioActual$.value;
   }
 
   isAdmin(): boolean {
-    const user = this.getCurrentUser();
-    return user?.rol === 'admin';
+    const usuario = this.getUsuarioActual();
+    return usuario && usuario.rol === 'admin';
   }
 
-  getUsuarioActual() {
-    return this.getCurrentUser();
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  private cargarUsuarioGuardado(): void {
+    const token = localStorage.getItem(this.tokenKey);
+    if (token) {
+      // Aquí puedes hacer una llamada al backend para obtener el usuario
+      // Por ahora, solo verificamos que exista el token
+    }
   }
 }

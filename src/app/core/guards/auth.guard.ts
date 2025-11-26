@@ -10,7 +10,6 @@ export const authGuard: CanMatchFn = (route, segments) => {
     return true;
   }
 
-  
   router.navigate(['/login']);
   return false;
 };
