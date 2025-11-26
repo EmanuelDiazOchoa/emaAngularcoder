@@ -7,7 +7,9 @@
       "email": "admin@test.com",
       "password": "admin123",
       "rol": "admin",
-      "fechaCreacion": "2024-01-01T00:00:00.000Z"
+      "telefono": "+54 11 1234-5678",
+      "direccion": "Av. Corrientes 1234, CABA",
+      "fechaCreacion": "2024-01-01T10:00:00.000Z"
     },
     {
       "id": 2,
@@ -16,7 +18,9 @@
       "email": "user@test.com",
       "password": "user123",
       "rol": "user",
-      "fechaCreacion": "2024-01-15T00:00:00.000Z"
+      "telefono": "+54 11 8765-4321",
+      "direccion": "Av. Santa Fe 5678, CABA",
+      "fechaCreacion": "2024-01-15T14:30:00.000Z"
     },
     {
       "id": 3,
@@ -25,7 +29,9 @@
       "email": "maria@test.com",
       "password": "maria123",
       "rol": "user",
-      "fechaCreacion": "2024-02-01T00:00:00.000Z"
+      "telefono": "+54 11 5555-6666",
+      "direccion": "Av. Cabildo 910, CABA",
+      "fechaCreacion": "2024-02-01T09:00:00.000Z"
     }
   ],
   "alumnos": [
@@ -34,6 +40,8 @@
       "nombre": "Juan",
       "apellido": "Pérez",
       "email": "juan.perez@example.com",
+      "perfil": "Desarrollador Frontend",
+      "telefono": "+54 11 2222-3333",
       "fechaInscripcion": "2024-01-10"
     },
     {
@@ -41,6 +49,8 @@
       "nombre": "María",
       "apellido": "Gómez",
       "email": "maria.gomez@example.com",
+      "perfil": "Desarrollador Backend",
+      "telefono": "+54 11 4444-5555",
       "fechaInscripcion": "2024-02-20"
     },
     {
@@ -48,7 +58,18 @@
       "nombre": "Carlos",
       "apellido": "Rodríguez",
       "email": "carlos.rodriguez@example.com",
+      "perfil": "IT Manager",
+      "telefono": "+54 11 6666-7777",
       "fechaInscripcion": "2024-03-15"
+    },
+    {
+      "id": 4,
+      "nombre": "Ana",
+      "apellido": "Martínez",
+      "email": "ana.martinez@example.com",
+      "perfil": "Usuario Final",
+      "telefono": "+54 11 8888-9999",
+      "fechaInscripcion": "2024-03-20"
     }
   ],
   "cursos": [
@@ -56,7 +77,9 @@
       "id": 1,
       "nombre": "Angular Básico",
       "descripcion": "Introducción a Angular y TypeScript",
-      "duracion": "8 semanas",
+      "duracion": "40 horas",
+      "cantidadClases": 10,
+      "profesor": "Prof. Roberto García",
       "fechaInicio": "2024-01-15",
       "fechaFin": "2024-03-10"
     },
@@ -64,7 +87,9 @@
       "id": 2,
       "nombre": "React Avanzado",
       "descripcion": "React Hooks, Context API y Redux",
-      "duracion": "6 semanas",
+      "duracion": "32 horas",
+      "cantidadClases": 8,
+      "profesor": "Prof. Laura Fernández",
       "fechaInicio": "2024-02-01",
       "fechaFin": "2024-03-15"
     },
@@ -72,29 +97,58 @@
       "id": 3,
       "nombre": "Node.js y Express",
       "descripcion": "Desarrollo de APIs REST con Node.js",
-      "duracion": "10 semanas",
+      "duracion": "48 horas",
+      "cantidadClases": 12,
+      "profesor": "Prof. Miguel Torres",
       "fechaInicio": "2024-03-01",
       "fechaFin": "2024-05-10"
+    },
+    {
+      "id": 4,
+      "nombre": "SQL y Bases de Datos",
+      "descripcion": "Fundamentos de bases de datos relacionales",
+      "duracion": "24 horas",
+      "cantidadClases": 6,
+      "profesor": "Prof. Claudia Ruiz",
+      "fechaInicio": "2024-04-01",
+      "fechaFin": "2024-05-01"
     }
   ],
   "inscripciones": [
     {
       "id": 1,
-      "usuarioId": 1,
+      "alumnoId": 1,
       "cursoId": 1,
+      "usuarioId": 1,
       "fecha": "2024-01-10T10:00:00.000Z"
     },
     {
       "id": 2,
-      "usuarioId": 2,
+      "alumnoId": 2,
       "cursoId": 1,
+      "usuarioId": 2,
       "fecha": "2024-01-12T14:30:00.000Z"
     },
     {
       "id": 3,
-      "usuarioId": 2,
+      "alumnoId": 2,
       "cursoId": 2,
+      "usuarioId": 2,
       "fecha": "2024-02-01T09:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "alumnoId": 3,
+      "cursoId": 3,
+      "usuarioId": 1,
+      "fecha": "2024-03-01T11:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "alumnoId": 4,
+      "cursoId": 4,
+      "usuarioId": 1,
+      "fecha": "2024-03-20T15:00:00.000Z"
     }
   ]
 }

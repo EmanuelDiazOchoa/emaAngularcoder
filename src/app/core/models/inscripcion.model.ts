@@ -1,6 +1,7 @@
 export interface Inscripcion {
-  id: number;          // 👈 CAMBIARLO A number SI FUE string
-  usuarioId: number;
+  id: number;
+  alumnoId: number;  
   cursoId: number;
+  usuarioId: number; 
   fecha: string;
 }

@@ -3,5 +3,7 @@ export interface Alumno {
   nombre: string;
   apellido: string;
   email: string;
-  fechaInscripcion?: string;
+  perfil: string; 
+  telefono?: string;
+  fechaInscripcion?: string; 
 }

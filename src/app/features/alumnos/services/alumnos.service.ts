@@ -1,33 +1,37 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Alumno } from '../../../core/models/alumnos.model';
+import { environment } from '../../../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlumnosService {
+  private http = inject(HttpClient);
+  private readonly API_URL = `${environment.apiUrl}/alumnos`;
 
-  private alumnos: Alumno[] = [
-    { id: 1, nombre: 'Juan', apellido: 'Perez', email: 'juan.perez@example.com', fechaInscripcion: '2024-01-10' },
-    { id: 2, nombre: 'Maria', apellido: 'Gomez', email: 'maria.gomez@example.com', fechaInscripcion: '2024-02-20' }
-  ];
-  private alumnos$ = new BehaviorSubject<Alumno[]>(this.alumnos);
-
-  constructor() {}
-
-  getAlumnos(): Observable<Alumno[]> {
-    return this.alumnos$.asObservable();
+  
+  getAll(): Observable<Alumno[]> {
+    return this.http.get<Alumno[]>(this.API_URL);
   }
 
-  addAlumno(alumno: Omit<Alumno, 'id'>): void {
-    const newId = this.alumnos.length > 0 ? Math.max(...this.alumnos.map(a => a.id)) + 1 : 1;
-    const newAlumno: Alumno = { ...alumno, id: newId };
-    this.alumnos = [...this.alumnos, newAlumno];
-    this.alumnos$.next(this.alumnos);
+  
+  getById(id: number): Observable<Alumno> {
+    return this.http.get<Alumno>(`${this.API_URL}/${id}`);
   }
 
-  deleteAlumno(id: number): void {
-    this.alumnos = this.alumnos.filter(a => a.id !== id);
-    this.alumnos$.next(this.alumnos);
+  
+  create(alumno: Omit<Alumno, 'id'>): Observable<Alumno> {
+    return this.http.post<Alumno>(this.API_URL, alumno);
+  }
+
+  
+  update(id: number, changes: Partial<Alumno>): Observable<Alumno> {
+    return this.http.patch<Alumno>(`${this.API_URL}/${id}`, changes);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 }

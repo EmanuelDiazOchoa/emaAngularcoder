@@ -37,9 +37,17 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     this.auth$ = this.store.select('auth');
 
-    this.user$ = this.auth$.pipe(map(state => state.user));
-    this.isLogged$ = this.auth$.pipe(map(state => !!state.user));
-    this.isAdmin$ = this.auth$.pipe(map(state => state.user?.rol === 'admin'));
+    this.user$ = this.auth$.pipe(
+      map(state => state?.user || null)  // ← Agregar seguridad
+    );
+    
+    this.isLogged$ = this.auth$.pipe(
+      map(state => !!state?.user)  // ← Agregar ?
+    );
+    
+    this.isAdmin$ = this.auth$.pipe(
+      map(state => state?.user?.rol === 'admin')  // ← Agregar ?
+    );
   }
 
   logout() {

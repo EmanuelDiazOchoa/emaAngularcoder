@@ -5,7 +5,9 @@ export interface Usuario {
   nombre: string;
   apellido: string;
   email: string;
-  rol: Rol;
   password?: string;
+  rol: Rol;
+  telefono?: string;
+  direccion?: string;
   fechaCreacion?: string;
 }
