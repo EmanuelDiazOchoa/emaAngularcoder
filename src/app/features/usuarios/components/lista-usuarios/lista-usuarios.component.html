@@ -1,41 +1,107 @@
-<div class="container mt-4">
-  <div class="d-flex justify-content-between mb-3">
-    <h2>Usuarios</h2>
+<div class="usuarios-container">
+  <mat-card class="header-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>people</mat-icon>
+        Gestión de Usuarios
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="nuevoUsuario()">
+        <mat-icon>person_add</mat-icon>
+        Nuevo Usuario
+      </button>
+    </mat-card-actions>
+  </mat-card>
 
-    <button class="btn btn-success" (click)="nuevoUsuario()">
-      Nuevo Usuario
-    </button>
+ 
+  <div class="loading-container" *ngIf="loading$ | async">
+    <mat-spinner></mat-spinner>
   </div>
 
-  <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Email</th>
-        <th>Rol</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
+  
+  <mat-card class="error-card" *ngIf="error$ | async as error">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+  </mat-card>
 
-    <tbody>
-      <tr *ngFor="let u of usuarios">
-        <td>{{ u.id }}</td>
-        <td>{{ u.nombre }}</td>
-        <td>{{ u.apellido }}</td>
-        <td>{{ u.email }}</td>
-        <td>{{ u.rol }}</td>
-        <td>
-          <button class="btn btn-sm btn-primary" (click)="editarUsuario(u.id)">
-            Editar
+ 
+  <mat-card *ngIf="!(loading$ | async)" class="table-card">
+    <table mat-table [dataSource]="(usuarios$ | async) || []" class="mat-elevation-z2">
+      
+   
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let usuario"> {{ usuario.id }} </td>
+      </ng-container>
+
+  
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef> Nombre Completo </th>
+        <td mat-cell *matCellDef="let usuario"> 
+          <strong>{{ usuario.nombre }} {{ usuario.apellido }}</strong>
+        </td>
+      </ng-container>
+
+     
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let usuario">
+          <mat-icon class="icon-inline">email</mat-icon>
+          {{ usuario.email }}
+        </td>
+      </ng-container>
+
+     
+      <ng-container matColumnDef="rol">
+        <th mat-header-cell *matHeaderCellDef> Rol </th>
+        <td mat-cell *matCellDef="let usuario">
+          <mat-chip [class.admin-chip]="usuario.rol === 'admin'" 
+                    [class.user-chip]="usuario.rol === 'user'">
+            <mat-icon class="chip-icon">
+              {{ usuario.rol === 'admin' ? 'admin_panel_settings' : 'person' }}
+            </mat-icon>
+            {{ usuario.rol === 'admin' ? 'Administrador' : 'Usuario' }}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+    
+      <ng-container matColumnDef="telefono">
+        <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+        <td mat-cell *matCellDef="let usuario">
+          <mat-icon class="icon-inline">phone</mat-icon>
+          {{ usuario.telefono || 'N/A' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef> Fecha Creación </th>
+        <td mat-cell *matCellDef="let usuario">
+          {{ usuario.fechaCreacion | date:'dd/MM/yyyy' }}
+        </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let usuario">
+          <button mat-icon-button color="primary" 
+                  matTooltip="Editar"
+                  (click)="editarUsuario(usuario.id)">
+            <mat-icon>edit</mat-icon>
           </button>
-
-          <button class="btn btn-sm btn-danger ms-2" (click)="eliminarUsuario(u.id)">
-            Eliminar
+          <button mat-icon-button color="warn"
+                  matTooltip="Eliminar" 
+                  (click)="eliminarUsuario(usuario.id)">
+            <mat-icon>delete</mat-icon>
           </button>
         </td>
-      </tr>
-    </tbody>
-  </table>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnas;" 
+          class="table-row"></tr>
+    </table>
+  </mat-card>
 </div>

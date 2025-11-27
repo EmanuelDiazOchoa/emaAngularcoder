@@ -1,17 +1,96 @@
-<mat-card>
-  <form [formGroup]="form" (ngSubmit)="ingresar()">
+<div class="login-wrapper">
+  <div class="login-background">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email" />
-    </mat-form-field>
+  <mat-card class="login-card">
+    <div class="logo-container">
+      <div class="logo-circle">
+        <mat-icon class="logo-icon">school</mat-icon>
+      </div>
+      <h1 class="app-title">Centro de Estudiantes</h1>
+      <p class="app-subtitle">Sistema de Gestión Académica</p>
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Password</mat-label>
-      <input matInput formControlName="password" type="password" />
-    </mat-form-field>
+    <form [formGroup]="form" (ngSubmit)="ingresar()" class="login-form">
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Correo Electrónico</mat-label>
+        <mat-icon matPrefix class="input-icon">email</mat-icon>
+        <input matInput 
+               formControlName="email" 
+               type="email" 
+               placeholder="usuario@ejemplo.com"
+               autocomplete="email">
+        <mat-error *ngIf="form.get('email')?.hasError('required')">
+          El email es obligatorio
+        </mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('email')">
+          Email inválido
+        </mat-error>
+      </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">Ingresar</button>
-  </form>
-</mat-card>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Contraseña</mat-label>
+        <mat-icon matPrefix class="input-icon">lock</mat-icon>
+        <input matInput 
+               formControlName="password" 
+               [type]="hidePassword ? 'password' : 'text'"
+               placeholder="Ingresa tu contraseña"
+               autocomplete="current-password">
+        <button mat-icon-button 
+                matSuffix 
+                type="button"
+                (click)="hidePassword = !hidePassword"
+                [attr.aria-label]="'Ocultar contraseña'"
+                [attr.aria-pressed]="hidePassword">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.get('password')?.hasError('required')">
+          La contraseña es obligatoria
+        </mat-error>
+      </mat-form-field>
 
+      <button mat-raised-button 
+              color="primary" 
+              type="submit" 
+              class="login-button"
+              [disabled]="form.invalid || loading">
+        <mat-spinner diameter="20" *ngIf="loading" class="button-spinner"></mat-spinner>
+        <span *ngIf="!loading">Ingresar</span>
+      </button>
+
+      <div class="demo-credentials">
+        <mat-divider></mat-divider>
+        <p class="credentials-title">
+          <mat-icon>info</mat-icon>
+          Credenciales de prueba
+        </p>
+        <div class="credentials-list">
+          <div class="credential-item">
+            <mat-chip class="chip-admin">
+              <mat-icon>admin_panel_settings</mat-icon>
+              Admin
+            </mat-chip>
+            <span class="credential-text">admin&#64;test.com / admin123</span>
+          </div>
+          <div class="credential-item">
+            <mat-chip class="chip-user">
+              <mat-icon>person</mat-icon>
+              Usuario
+            </mat-chip>
+           <span class="credential-text">user&#64;test.com / user123</span>
+          </div>
+        </div>
+      </div>
+
+    </form>
+
+    <div class="footer-text">
+      <p>© 2025 Centro de Estudiantes</p>
+      <p>Desarrollado con Angular 19 + NgRx</p>
+    </div>
+  </mat-card>
+</div>

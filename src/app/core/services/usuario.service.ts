@@ -1,90 +1,57 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Usuario } from '../models/usuario.model';
+import { environment } from '../../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuariosService {
+  private http = inject(HttpClient);
+  private readonly API_URL = `${environment.apiUrl}/users`;
 
-  // --------------------------
-  // 🌟 Datos iniciales fake
-  // --------------------------
-  private usuarios: Usuario[] = [
-    {
-      id: 1,
-      nombre: 'Juan',
-      apellido: 'Pérez',
-      email: 'juan@test.com',
-      rol: 'admin',
-      fechaCreacion: new Date().toISOString()
-    },
-    {
-      id: 2,
-      nombre: 'Ana',
-      apellido: 'Gomez',
-      email: 'ana@test.com',
-      rol: 'user',
-      fechaCreacion: new Date().toISOString()
-    }
-  ];
 
-  // --------------------------
-  // 📌 BehaviorSubject para reactividad
-  // --------------------------
-  private usuarios$ = new BehaviorSubject<Usuario[]>([...this.usuarios]);
-
-  // --------------------------
-  // 📌 Métodos públicos
-  // --------------------------
-
-  // Observable para componentes
-  getUsuarios(): Observable<Usuario[]> {
-    return this.usuarios$.asObservable();
-  }
-
-  // Compatibilidad con código viejo
   getAll(): Observable<Usuario[]> {
-    return this.getUsuarios();
+    return this.http.get<Usuario[]>(this.API_URL);
   }
 
-  // Búsqueda async
-  getById(id: number): Observable<Usuario | undefined> {
-    return of(this.usuarios.find(u => u.id === id));
+
+  getUsuarios(): Observable<Usuario[]> {
+    return this.getAll();
   }
 
-  // Helper síncrono (corregido)
-  getByIdSync(id: number): Usuario | undefined {
-    return this.usuarios.find(u => u.id === id);
+
+  getById(id: number): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.API_URL}/${id}`);
   }
 
-  // Crear usuario
-  add(usuario: Omit<Usuario, 'id' | 'fechaCreacion'>): Observable<Usuario> {
-    const newUser: Usuario = {
+  create(usuario: Omit<Usuario, 'id' | 'fechaCreacion'>): Observable<Usuario> {
+    const newUser = {
       ...usuario,
-      id: Date.now(), // ID único fake
       fechaCreacion: new Date().toISOString()
     };
-
-    this.usuarios.push(newUser);
-    this.usuarios$.next([...this.usuarios]);
-    return of(newUser);
+    return this.http.post<Usuario>(this.API_URL, newUser);
   }
 
-  // Actualizar usuario
-  update(id: number, usuario: Partial<Usuario>): Observable<Usuario | undefined> {
-    this.usuarios = this.usuarios.map(u =>
-      u.id === id ? { ...u, ...usuario } : u
-    );
-    const updated = this.usuarios.find(u => u.id === id);
-    this.usuarios$.next([...this.usuarios]);
-    return of(updated);
+
+  add(usuario: Omit<Usuario, 'id' | 'fechaCreacion'>): Observable<Usuario> {
+    return this.create(usuario);
   }
 
-  // Eliminar usuario
+
+  update(id: number, changes: Partial<Usuario>): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.API_URL}/${id}`, changes);
+  }
+
+
   delete(id: number): Observable<void> {
-    this.usuarios = this.usuarios.filter(u => u.id !== id);
-    this.usuarios$.next([...this.usuarios]);
-    return of();
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
+
+
+  getByIdSync(id: number): Usuario | undefined {
+    
+    return undefined;
   }
 }

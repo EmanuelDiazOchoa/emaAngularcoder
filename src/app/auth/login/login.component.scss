@@ -3,102 +3,85 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #001f3f, #000000);
-  background-size: cover;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
+}
+
+.login-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+
+  .shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: float 20s infinite ease-in-out;
+  }
+
+  .shape-1 {
+    width: 500px;
+    height: 500px;
+    background: white;
+    top: -100px;
+    left: -100px;
+    animation-delay: 0s;
+  }
+
+  .shape-2 {
+    width: 400px;
+    height: 400px;
+    background: white;
+    bottom: -100px;
+    right: -100px;
+    animation-delay: 7s;
+  }
+
+  .shape-3 {
+    width: 300px;
+    height: 300px;
+    background: white;
+    top: 50%;
+    right: 10%;
+    animation-delay: 14s;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-30px) scale(1.05);
+  }
 }
 
 .login-card {
   width: 100%;
-  max-width: 400px;
-  padding: 40px;
-  border-radius: 16px;
-  backdrop-filter: blur(18px);
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(0, 0, 0, 0.22);
-  color: white;
-  box-shadow: 0 8px 32px rgb(2, 247, 23);
-  animation: fadeIn 0.6s ease-in-out;
-}
+  max-width: 450px;
+  padding: 48px 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.95);
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.6s ease-out;
 
-.title {
-  text-align: center;
-  margin-bottom: 30px;
-  font-weight: 700;
-  color: #ffffff;
-  font-size: 28px;
-  letter-spacing: 0.5px;
-}
-
-.full-width {
-  width: 100%;
-  margin-bottom: 16px;
-
-  mat-form-field {
-    width: 100%;
+  @media (max-width: 480px) {
+    padding: 32px 24px;
+    border-radius: 16px;
   }
 }
 
-// Estilos directos sin ::ng-deep (mejor práctica)
-::ng-deep {
-  .login-wrapper .mat-mdc-input-element {
-    color: rgba(255, 255, 255, 0.9) !important;
-    caret-color: white !important;
-  }
-
-  .login-wrapper .mdc-text-field {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    border-radius: 8px !important;
-  }
-
-  .login-wrapper .mdc-floating-label {
-    color: rgba(255, 255, 255, 0.7) !important;
-  }
-}
-
-// Estado focused
-::ng-deep .mdc-text-field--focused {
-  background-color: rgba(255, 255, 255, 0.12) !important;
-}
-
-// Error state
-::ng-deep .mat-mdc-form-field-error {
-  color: #ff6b6b !important;
-  font-size: 12px;
-}
-
-.btn-login {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.3s ease-in-out;
-  background: linear-gradient(90deg, #4a7fd7, #2e5090);
-  border: none;
-  color: white;
-  cursor: pointer;
-
-  &:hover:not(:disabled) {
-    transform: scale(1.02);
-    box-shadow: 0 4px 15px rgba(82, 119, 221, 0.4);
-    background: linear-gradient(90deg, #5589e8, #3a5fa6);
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.98);
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-}
-
-@keyframes fadeIn {
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(-15px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -106,22 +89,238 @@
   }
 }
 
-// Media query para dispositivos pequeños
-@media (max-width: 480px) {
-  .login-card {
-    padding: 30px 20px;
-    border-radius: 12px;
+.logo-container {
+  text-align: center;
+  margin-bottom: 32px;
+
+  .logo-circle {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+    animation: pulse 2s infinite;
+
+    .logo-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+      color: white;
+    }
   }
 
-  .title {
-    font-size: 24px;
-    margin-bottom: 25px;
+  .app-title {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @media (max-width: 480px) {
+      font-size: 24px;
+    }
   }
 
-  .btn-login {
-    padding: 10px;
-    font-size: 15px;
+  .app-subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
   }
 }
 
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.6);
+  }
+}
 
+.login-form {
+  .full-width {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  mat-form-field {
+    .input-icon {
+      color: #667eea;
+      margin-right: 8px;
+    }
+
+    ::ng-deep {
+      .mat-mdc-text-field-wrapper {
+        background-color: #f8f9fa;
+      }
+
+      .mat-mdc-form-field-focus-overlay {
+        background-color: transparent;
+      }
+
+      .mdc-text-field--outlined {
+        &:hover {
+          .mdc-notched-outline {
+            .mdc-notched-outline__leading,
+            .mdc-notched-outline__notch,
+            .mdc-notched-outline__trailing {
+              border-color: #667eea;
+            }
+          }
+        }
+      }
+
+      .mat-mdc-form-field.mat-focused {
+        .mdc-notched-outline {
+          .mdc-notched-outline__leading,
+          .mdc-notched-outline__notch,
+          .mdc-notched-outline__trailing {
+            border-color: #667eea !important;
+            border-width: 2px !important;
+          }
+        }
+      }
+
+      .mat-mdc-input-element {
+        font-size: 15px;
+      }
+    }
+  }
+
+  .login-button {
+    width: 100%;
+    height: 56px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 12px;
+    margin-top: 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.6);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .button-spinner {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+.demo-credentials {
+  margin-top: 32px;
+
+  mat-divider {
+    margin-bottom: 20px;
+  }
+
+  .credentials-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 16px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: #667eea;
+    }
+  }
+
+  .credentials-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .credential-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #e9ecef;
+      transform: translateX(4px);
+    }
+
+    mat-chip {
+      min-width: 90px;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 12px;
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+      }
+    }
+
+    .chip-admin {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    .chip-user {
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+
+    .credential-text {
+      font-size: 13px;
+      color: #666;
+      font-family: 'Courier New', monospace;
+      font-weight: 500;
+    }
+  }
+}
+
+.footer-text {
+  margin-top: 32px;
+  text-align: center;
+
+  p {
+    margin: 4px 0;
+    font-size: 12px;
+    color: #999;
+
+    &:first-child {
+      font-weight: 600;
+      color: #666;
+    }
+  }
+}
