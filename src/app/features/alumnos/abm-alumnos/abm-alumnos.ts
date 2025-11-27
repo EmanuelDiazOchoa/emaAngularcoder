@@ -1,9 +1,24 @@
-import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { AlumnosService } from '../services/alumnos.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
+
+import * as AlumnosActions from '../../../store/alumnos/alumnos.actions';
+import { selectAlumnoById, selectAlumnosLoading } from '../../../store/alumnos/alumnos.selectors';
+
+import { Alumno } from '../../../core/models/alumnos.model';
 
 @Component({
   selector: 'app-abm-alumnos',
@@ -11,29 +26,96 @@ import { AlumnosService } from '../services/alumnos.service';
   styleUrls: ['./abm-alumnos.scss'],
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ]
 })
-export class AbmAlumnosComponent {
-  form: FormGroup;
-  alumnosService = inject(AlumnosService);
+export class AbmAlumnosComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private store = inject(Store);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private snackBar = inject(MatSnackBar);
 
-  constructor(private fb: FormBuilder) {
+  form!: FormGroup;
+  alumnoId?: number;
+  loading$: Observable<boolean> = this.store.select(selectAlumnosLoading);
+
+  ngOnInit(): void {
+    this.initForm();
+    this.checkEditMode();
+  }
+
+  private initForm(): void {
     this.form = this.fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]]
+      nombre: ['', [Validators.required, Validators.minLength(2)]],
+      apellido: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      perfil: ['', Validators.required],
+      telefono: [''],
+      fechaInscripcion: [new Date().toISOString().split('T')[0]]
     });
   }
 
-  agregar() {
+  private checkEditMode(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.alumnoId = Number(id);
+      
+      this.store.select(selectAlumnoById(this.alumnoId)).subscribe(alumno => {
+        if (alumno) {
+          this.form.patchValue(alumno);
+        }
+      });
+    }
+  }
+
+  guardar(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.snackBar.open('Por favor complete todos los campos requeridos', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
       return;
     }
-    this.alumnosService.addAlumno(this.form.value);
-    this.form.reset();
+
+    const alumnoData = this.form.value;
+
+    if (this.alumnoId) {
+      
+      this.store.dispatch(AlumnosActions.updateAlumno({ 
+        id: this.alumnoId, 
+        changes: alumnoData 
+      }));
+      this.snackBar.open('Alumno actualizado correctamente', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+    } else {
+    
+      this.store.dispatch(AlumnosActions.createAlumno({ alumno: alumnoData }));
+      this.snackBar.open('Alumno creado correctamente', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+    }
+
+    
+    setTimeout(() => {
+      this.router.navigate(['/dashboard/alumnos']);
+    }, 500);
+  }
+
+  cancelar(): void {
+    this.router.navigate(['/dashboard/alumnos']);
   }
 }

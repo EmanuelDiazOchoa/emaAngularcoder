@@ -12,30 +12,39 @@ import { AuthEffects } from './store/auth/auth.effects';
 import { AuthService } from './core/services/auth.service';
 import { authInterceptor } from './core/interceptors/auth.interceptors';
 
-// 👇 Importar los nuevos reducers cuando los creemos
-// import { alumnosReducer } from './store/alumnos/alumnos.reducer';
-// import { cursosReducer } from './store/cursos/cursos.reducer';
-// import { inscripcionesReducer } from './store/inscripciones/inscripciones.reducer';
+
+import { alumnosReducer } from './store/alumnos/alumnos.reducer';
+import { AlumnosEffects } from './store/alumnos/alumnos.effects';
+
+import { cursosReducer } from './store/cursos/cursos.reducer';
+import { CursosEffects } from './store/cursos/cursos.effects';
+
+import { inscripcionesReducer } from './store/inscripciones/inscripciones.reducer';
+import { InscripcionesEffects } from './store/inscripciones/inscripciones.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([authInterceptor]) // 👈 Agregar interceptor
+      withInterceptors([authInterceptor])
     ),
     provideAnimations(),
     AuthService,
     provideStore({ 
-      auth: authReducer
-      // 👇 Agregar más reducers aquí
-      // alumnos: alumnosReducer,
-      // cursos: cursosReducer,
-      // inscripciones: inscripcionesReducer
+      auth: authReducer,
+      alumnos: alumnosReducer,
+      cursos: cursosReducer,
+      inscripciones: inscripcionesReducer  
     }),
-    provideEffects([AuthEffects]), // 👈 Agregar más effects después
+    provideEffects([
+      AuthEffects, 
+      AlumnosEffects,
+      CursosEffects,
+      InscripcionesEffects  
+    ]),
     provideStoreDevtools({ 
       maxAge: 25, 
-      logOnly: false // 👈 Cambiar a false para dev
+      logOnly: false
     }),
   ]
 };

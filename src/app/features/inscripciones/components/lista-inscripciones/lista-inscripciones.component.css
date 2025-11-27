@@ -1,6 +1,6 @@
-.cursos-container {
+.inscripciones-container {
   padding: 24px;
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -149,21 +149,13 @@
   transform: scale(1.1);
 }
 
-.table-card button[mat-icon-button][color="primary"]:hover {
-  background-color: rgba(103, 58, 183, 0.1);
-}
-
-.table-card button[mat-icon-button][color="accent"]:hover {
-  background-color: rgba(255, 152, 0, 0.1);
-}
-
 .table-card button[mat-icon-button][color="warn"]:hover {
   background-color: rgba(244, 67, 54, 0.1);
 }
 
 
 @media (max-width: 768px) {
-  .cursos-container {
+  .inscripciones-container {
     padding: 12px;
   }
 

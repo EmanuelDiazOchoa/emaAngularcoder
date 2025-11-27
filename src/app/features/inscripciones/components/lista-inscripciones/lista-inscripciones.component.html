@@ -1,29 +1,90 @@
-<div class="container mt-4">
-  <h2>📋 Lista de Inscripciones</h2>
+<div class="inscripciones-container">
+  <mat-card class="header-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>assignment</mat-icon>
+        Gestión de Inscripciones
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="nuevaInscripcion()">
+        <mat-icon>add</mat-icon>
+        Nueva Inscripción
+      </button>
+    </mat-card-actions>
+  </mat-card>
 
-  <button class="btn btn-primary mt-2" (click)="nuevaInscripcion()">
-    ➕ Nueva Inscripción
-  </button>
+  <div class="loading-container" *ngIf="loading$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
 
-  <table class="table table-striped mt-3">
-    <thead>
-      <tr>
-        <th>Usuario</th>
-        <th>Curso</th>
-        <th>Fecha</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
+  
+  <mat-card class="error-card" *ngIf="error$ | async as error">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+  </mat-card>
 
-    <tbody>
-      <tr *ngFor="let i of inscripciones">
-        <td>{{ getUsuarioNombre(i.usuarioId) }}</td>
-        <td>{{ getCursoNombre(i.cursoId) }}</td>
-        <td>{{ i.fecha | date:'short' }}</td>
-        <td>
-          <button class="btn btn-danger btn-sm" (click)="eliminar(i.id)">Eliminar</button>
+  
+  <mat-card *ngIf="!(loading$ | async)" class="table-card">
+    <table mat-table [dataSource]="(inscripciones$ | async) || []" class="mat-elevation-z2">
+      
+     
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let inscripcion"> {{ inscripcion.id }} </td>
+      </ng-container>
+
+      
+      <ng-container matColumnDef="alumno">
+        <th mat-header-cell *matHeaderCellDef> Alumno </th>
+        <td mat-cell *matCellDef="let inscripcion">
+          <mat-icon class="icon-inline">person</mat-icon>
+          <strong>{{ getAlumnoNombre(inscripcion.alumnoId) }}</strong>
         </td>
-      </tr>
-    </tbody>
-  </table>
+      </ng-container>
+
+      
+      <ng-container matColumnDef="curso">
+        <th mat-header-cell *matHeaderCellDef> Curso </th>
+        <td mat-cell *matCellDef="let inscripcion">
+          <mat-icon class="icon-inline">school</mat-icon>
+          {{ getCursoNombre(inscripcion.cursoId) }}
+        </td>
+      </ng-container>
+
+      
+      <ng-container matColumnDef="usuario">
+        <th mat-header-cell *matHeaderCellDef> Inscrito por </th>
+        <td mat-cell *matCellDef="let inscripcion">
+          <mat-chip>{{ getUsuarioNombre(inscripcion.usuarioId) }}</mat-chip>
+        </td>
+      </ng-container>
+
+      
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef> Fecha </th>
+        <td mat-cell *matCellDef="let inscripcion">
+          <mat-icon class="icon-inline">event</mat-icon>
+          {{ inscripcion.fecha | date:'dd/MM/yyyy HH:mm' }}
+        </td>
+      </ng-container>
+
+      
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let inscripcion">
+          <button mat-icon-button color="warn"
+                  matTooltip="Eliminar" 
+                  (click)="eliminarInscripcion(inscripcion.id)"
+                  *ngIf="isAdmin$ | async">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnas;" 
+          class="table-row"></tr>
+    </table>
+  </mat-card>
 </div>

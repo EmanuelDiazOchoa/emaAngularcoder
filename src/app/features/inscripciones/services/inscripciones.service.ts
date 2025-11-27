@@ -1,37 +1,48 @@
-import { Injectable } from '@angular/core'; 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Inscripcion } from '../../../core/models/inscripcion.model';
+import { environment } from '../../../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InscripcionesService {
+  private http = inject(HttpClient);
+  private readonly API_URL = `${environment.apiUrl}/inscripciones`;
 
-  private inscripciones: Inscripcion[] = [];
 
-  private inscripciones$ = new BehaviorSubject<Inscripcion[]>(this.inscripciones);
+  getAll(): Observable<Inscripcion[]> {
+    return this.http.get<Inscripcion[]>(this.API_URL);
+  }
 
-  constructor(private http: HttpClient) {}
 
-  // Obtener todas
   obtenerInscripciones(): Observable<Inscripcion[]> {
-    return this.inscripciones$.asObservable();
+    return this.getAll();
   }
 
-  // Agregar inscripción
-  agregar(inscripcion: Omit<Inscripcion, 'id'>) {
-    const nueva: Inscripcion = {
-      id: this.inscripciones.length + 1,
-      ...inscripcion
-    };
 
-    this.inscripciones.push(nueva);
-    this.inscripciones$.next(this.inscripciones);
+  getById(id: number): Observable<Inscripcion> {
+    return this.http.get<Inscripcion>(`${this.API_URL}/${id}`);
   }
 
-  // Eliminar inscripción
+
+  create(inscripcion: Omit<Inscripcion, 'id'>): Observable<Inscripcion> {
+    return this.http.post<Inscripcion>(this.API_URL, inscripcion);
+  }
+
+
+  agregar(inscripcion: Omit<Inscripcion, 'id'>): Observable<Inscripcion> {
+    return this.create(inscripcion);
+  }
+
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
+
+
   eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`/api/inscripciones/${id}`);
+    return this.delete(id);
   }
 }

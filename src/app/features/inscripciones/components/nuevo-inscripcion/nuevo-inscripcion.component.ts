@@ -1,76 +1,110 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { InscripcionesService } from '../../services/inscripciones.service';
-import { UsuariosService } from '../../../../core/services/usuario.service';
-import { CursoService } from '../../../cursos/service/curso.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AuthState } from '../../../../store/auth/auth.models';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { Usuario } from '../../../../core/models/usuario.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
+import * as InscripcionesActions from '../../../../store/inscripciones/inscripciones.actions';
+import * as AlumnosActions from '../../../../store/alumnos/alumnos.actions';
+import * as CursosActions from '../../../../store/cursos/cursos.actions';
+import { selectAllAlumnos } from '../../../../store/alumnos/alumnos.selectors';
+import { selectAllCursos } from '../../../../store/cursos/cursos.selectors';
+import { selectInscripcionesLoading } from '../../../../store/inscripciones/inscripciones.selectors';
+import { selectUser } from '../../../../store/auth/auth.selectors';
+
+import { Alumno } from '../../../../core/models/alumnos.model';
 import { Curso } from '../../../../core/models/curso.model';
-import { Usuario as AuthUsuario } from '../../../../store/auth/auth.models';
 
 @Component({
   selector: 'app-nuevo-inscripcion',
+  templateUrl: './nuevo-inscripcion.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './nuevo-inscripcion.component.html'
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
+  ]
 })
 export class NuevoInscripcionComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private store = inject(Store);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
-  // Listados para selects
-  usuarios$!: Observable<Usuario[]>;
-  cursos$!: Observable<Curso[]>;
+  form!: FormGroup;
+  loading$: Observable<boolean> = this.store.select(selectInscripcionesLoading);
 
-  // Valores seleccionados
-  usuarioSeleccionado?: number;
-  cursoSeleccionado?: number;
-  // Observables de autenticación
-  usuarioActual$!: Observable<AuthUsuario | null>;
-  esAdmin$!: Observable<boolean>;
-
-  constructor(
-    private inscripcionesService: InscripcionesService,
-    private usuariosService: UsuariosService,
-    private cursosService: CursoService,
-    private store: Store<{ auth: AuthState }>
-  ) {
-    this.usuarios$ = this.usuariosService.getUsuarios();
-    this.cursos$ = this.cursosService.obtenerCursos();
-  }
+  
+  alumnos$: Observable<Alumno[]> = this.store.select(selectAllAlumnos);
+  cursos$: Observable<Curso[]> = this.store.select(selectAllCursos);
 
   ngOnInit(): void {
-    const auth$ = this.store.select('auth');
-
-    this.usuarioActual$ = auth$.pipe(map(state => state.user));
-    this.esAdmin$ = auth$.pipe(map(state => state.user?.rol === 'admin'));
+    this.initForm();
+   
+    this.store.dispatch(AlumnosActions.loadAlumnos());
+    this.store.dispatch(CursosActions.loadCursos());
   }
 
-  guardar() {
-    this.usuarioActual$.subscribe(usuario => {
+  private initForm(): void {
+    this.form = this.fb.group({
+      alumnoId: ['', Validators.required],
+      cursoId: ['', Validators.required]
+    });
+  }
 
-      // Si NO es admin, solo puede inscribir su propio ID
-      const usuarioId = usuario?.rol === 'admin'
-        ? this.usuarioSeleccionado
-        : usuario?.id;
+  guardar(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.snackBar.open('Por favor complete todos los campos', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
 
-      if (!usuarioId || !this.cursoSeleccionado) {
-        alert('Debe seleccionar un curso');
+    
+    this.store.select(selectUser).subscribe(user => {
+      if (!user) {
+        this.snackBar.open('Error: Usuario no identificado', 'Cerrar', {
+          duration: 3000
+        });
         return;
       }
 
-      this.inscripcionesService.agregar({
-        usuarioId,
-        cursoId: this.cursoSeleccionado,
+      const inscripcionData = {
+        alumnoId: this.form.value.alumnoId,
+        cursoId: this.form.value.cursoId,
+        usuarioId: user.id,
         fecha: new Date().toISOString()
+      };
+
+      this.store.dispatch(InscripcionesActions.createInscripcion({ inscripcion: inscripcionData }));
+      
+      this.snackBar.open('Inscripción creada correctamente', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
       });
 
-      alert('✔️ Inscripción guardada');
-      this.usuarioSeleccionado = undefined;
-      this.cursoSeleccionado = undefined;
+      
+      setTimeout(() => {
+        this.router.navigate(['/dashboard/inscripciones']);
+      }, 500);
     });
   }
 }
-

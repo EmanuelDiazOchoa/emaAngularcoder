@@ -1,76 +1,120 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../../core/services/auth.service';
-import { InscripcionesService } from '../../services/inscripciones.service';
-import { UsuariosService } from '../../../../core/services/usuario.service';
-import { CursoService } from '../../../cursos/service/curso.service';
-import { Inscripcion } from '../../../../core/models/inscripcion.model';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
+import * as InscripcionesActions from '../../../../store/inscripciones/inscripciones.actions';
+import * as AlumnosActions from '../../../../store/alumnos/alumnos.actions';
+import * as CursosActions from '../../../../store/cursos/cursos.actions';
+import { selectAllInscripciones, selectInscripcionesLoading, selectInscripcionesError } from '../../../../store/inscripciones/inscripciones.selectors';
+import { selectAllAlumnos } from '../../../../store/alumnos/alumnos.selectors';
+import { selectAllCursos } from '../../../../store/cursos/cursos.selectors';
+import { selectIsAdmin } from '../../../../store/auth/auth.selectors';
+
+import { Inscripcion } from '../../../../core/models/inscripcion.model';
+import { Alumno } from '../../../../core/models/alumnos.model';
+import { Curso } from '../../../../core/models/curso.model';
+
+import { UsuariosService } from '../../../../core/services/usuario.service';
+import { Usuario } from '../../../../core/models/usuario.model';
 
 @Component({
   selector: 'app-lista-inscripciones',
+  templateUrl: './lista-inscripciones.component.html',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './lista-inscripciones.component.html'
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatChipsModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
+  ]
 })
-export class ListaInscripcionesComponent implements OnInit, OnDestroy {
+export class ListaInscripcionesComponent implements OnInit {
+  private store = inject(Store);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  private usuariosService = inject(UsuariosService);
 
-  inscripciones: Inscripcion[] = [];
-  usuarios: any[] = [];
-  cursos: any[] = [];
-  private destroy$ = new Subject<void>();
 
-  constructor(
-    private inscripcionesService: InscripcionesService,
-    private usuariosService: UsuariosService,
-    private cursosService: CursoService,
-    private router: Router,
-    public auth: AuthService
-  ) {}
+  inscripciones$: Observable<Inscripcion[]> = this.store.select(selectAllInscripciones);
+  loading$: Observable<boolean> = this.store.select(selectInscripcionesLoading);
+  error$: Observable<string | null> = this.store.select(selectInscripcionesError);
+  isAdmin$: Observable<boolean> = this.store.select(selectIsAdmin);
+
+  alumnos$: Observable<Alumno[]> = this.store.select(selectAllAlumnos);
+  cursos$: Observable<Curso[]> = this.store.select(selectAllCursos);
+  usuarios: Usuario[] = [];
+
+  columnas = ['id', 'alumno', 'curso', 'usuario', 'fecha', 'acciones'];
+
+  private alumnosMap = new Map<number, string>();
+  private cursosMap = new Map<number, string>();
+  private usuariosMap = new Map<number, string>();
 
   ngOnInit(): void {
-    this.usuariosService.getUsuarios()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(u => this.usuarios = u);
+    
+    this.store.dispatch(InscripcionesActions.loadInscripciones());
+    this.store.dispatch(AlumnosActions.loadAlumnos());
+    this.store.dispatch(CursosActions.loadCursos());
 
-    this.cursosService.obtenerCursos()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(c => this.cursos = c);
-
-    this.inscripcionesService.obtenerInscripciones()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(list => {
-        const user = this.auth.getUsuarioActual();
-        this.inscripciones = this.auth.isAdmin() ? list : list.filter(i => i.usuarioId === user?.id);
+    this.usuariosService.getUsuarios().subscribe(usuarios => {
+      this.usuarios = usuarios;
+      usuarios.forEach(u => {
+        this.usuariosMap.set(u.id, `${u.nombre} ${u.apellido}`);
       });
-  }
+    });
 
-  eliminar(id: number): void {
-    if (!this.auth.isAdmin()) return;
-    this.inscripcionesService.eliminar(id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.inscripciones = this.inscripciones.filter(i => i.id !== id);
+    this.alumnos$.subscribe(alumnos => {
+      alumnos.forEach(a => {
+        this.alumnosMap.set(a.id, `${a.nombre} ${a.apellido}`);
       });
+    });
+
+    this.cursos$.subscribe(cursos => {
+      cursos.forEach(c => {
+        this.cursosMap.set(c.id, c.nombre);
+      });
+    });
   }
 
-  getUsuarioNombre(usuarioId: number): string {
-    const user = this.usuarios.find(u => u.id === usuarioId);
-    return user ? `${user.nombre} ${user.apellido}` : 'Usuario desconocido';
+  getAlumnoNombre(id: number): string {
+    return this.alumnosMap.get(id) || 'Alumno desconocido';
   }
 
-  getCursoNombre(cursoId: number): string {
-    const curso = this.cursos.find(c => c.id === cursoId);
-    return curso ? curso.nombre : 'Curso desconocido';
+  getCursoNombre(id: number): string {
+    return this.cursosMap.get(id) || 'Curso desconocido';
+  }
+
+  getUsuarioNombre(id: number): string {
+    return this.usuariosMap.get(id) || 'Usuario desconocido';
   }
 
   nuevaInscripcion(): void {
     this.router.navigate(['/dashboard/inscripciones/nueva']);
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.complete();
+  eliminarInscripcion(id: number): void {
+    if (confirm('¿Está seguro de eliminar esta inscripción?')) {
+      this.store.dispatch(InscripcionesActions.deleteInscripcion({ id }));
+      this.snackBar.open('Inscripción eliminada correctamente', 'Cerrar', {
+        duration: 3000
+      });
+    }
   }
 }

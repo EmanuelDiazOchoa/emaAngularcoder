@@ -1,66 +1,52 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Curso } from '../../../core/models/curso.model';
+import { environment } from '../../../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CursoService {
+  private http = inject(HttpClient);
+  private readonly API_URL = `${environment.apiUrl}/cursos`;
 
-  private cursos: Curso[] = [
-    {
-      id: 1,
-      nombre: 'Angular Básico',
-      descripcion: 'Introducción a Angular',
-      duracion: '4 semanas',
-      fechaInicio: '2024-01-15',
-      fechaFin: '2024-02-15'
-    },
-    {
-      id: 2,
-      nombre: 'React Inicial',
-      descripcion: 'Fundamentos de React',
-      duracion: '3 semanas',
-      fechaInicio: '2024-03-01',
-      fechaFin: '2024-03-22'
-    }
-  ];
 
-  private cursos$ = new BehaviorSubject<Curso[]>(this.cursos);
+  getAll(): Observable<Curso[]> {
+    return this.http.get<Curso[]>(this.API_URL);
+  }
 
-  // Método para obtener cursos
+ 
   obtenerCursos(): Observable<Curso[]> {
-    return this.cursos$.asObservable();
+    return this.getAll();
   }
 
-  getById(id: number): Observable<Curso | undefined> {
-    return of(this.cursos.find(c => c.id === id));
+
+  getById(id: number): Observable<Curso> {
+    return this.http.get<Curso>(`${this.API_URL}/${id}`);
   }
 
-  add(curso: Omit<Curso, 'id'>) {
-    const nuevo: Curso = {
-      id: this.cursos.length + 1,
-      ...curso
-    };
 
-    this.cursos.push(nuevo);
-    this.cursos$.next(this.cursos);
+  create(curso: Omit<Curso, 'id'>): Observable<Curso> {
+    return this.http.post<Curso>(this.API_URL, curso);
   }
 
-  update(id: number, curso: Partial<Curso>) {
-    this.cursos = this.cursos.map(c =>
-      c.id === id ? { ...c, ...curso } : c
-    );
-    this.cursos$.next(this.cursos);
+  add(curso: Omit<Curso, 'id'>): Observable<Curso> {
+    return this.create(curso);
   }
 
-  delete(id: number) {
-    this.cursos = this.cursos.filter(c => c.id !== id);
-    this.cursos$.next(this.cursos);
+ 
+  update(id: number, changes: Partial<Curso>): Observable<Curso> {
+    return this.http.patch<Curso>(`${this.API_URL}/${id}`, changes);
   }
 
-  obtenerCursoPorId(id: number): Curso | undefined {
-    return this.cursos.find(c => c.id === id);
+  
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 
+  
+  obtenerCursoPorId(id: number): Observable<Curso> {
+    return this.getById(id);
+  }
 }

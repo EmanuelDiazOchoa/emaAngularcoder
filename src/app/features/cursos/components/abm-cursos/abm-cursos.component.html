@@ -1,28 +1,100 @@
-<h2>{{ id ? 'Editar Curso' : 'Nuevo Curso' }}</h2>
+<div class="abm-container">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>{{ cursoId ? 'edit' : 'add_circle' }}</mat-icon>
+        {{ cursoId ? 'Editar Curso' : 'Nuevo Curso' }}
+      </mat-card-title>
+    </mat-card-header>
 
-<form [formGroup]="form" (ngSubmit)="guardar()">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre del Curso</mat-label>
+          <mat-icon matPrefix>school</mat-icon>
+          <input matInput formControlName="nombre" placeholder="Ej: Angular Avanzado">
+          <mat-error *ngIf="form.get('nombre')?.hasError('required')">
+            El nombre es obligatorio
+          </mat-error>
+        </mat-form-field>
 
-  <label>Nombre</label>
-  <input formControlName="nombre" type="text" />
-  <div *ngIf="form.controls.nombre.invalid && form.controls.nombre.touched">
-    El nombre es obligatorio
-  </div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción</mat-label>
+          <mat-icon matPrefix>description</mat-icon>
+          <textarea matInput formControlName="descripcion" 
+                    rows="3" 
+                    placeholder="Describe el contenido del curso"></textarea>
+          <mat-error *ngIf="form.get('descripcion')?.hasError('required')">
+            La descripción es obligatoria
+          </mat-error>
+        </mat-form-field>
 
-  <label>Descripción</label>
-  <input formControlName="descripcion" type="text" />
-  <div *ngIf="form.controls.descripcion.invalid && form.controls.descripcion.touched">
-    La descripción es obligatoria
-  </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Duración</mat-label>
+            <mat-icon matPrefix>schedule</mat-icon>
+            <input matInput formControlName="duracion" placeholder="Ej: 40 horas">
+            <mat-error *ngIf="form.get('duracion')?.hasError('required')">
+              La duración es obligatoria
+            </mat-error>
+          </mat-form-field>
 
-  <label>Duración</label>
-  <input formControlName="duracion" type="text" />
-  <div *ngIf="form.controls.duracion.invalid && form.controls.duracion.touched">
-    La duración es obligatoria
-  </div>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Cantidad de Clases</mat-label>
+            <mat-icon matPrefix>event_note</mat-icon>
+            <input matInput formControlName="cantidadClases" type="number" placeholder="Ej: 10">
+            <mat-error *ngIf="form.get('cantidadClases')?.hasError('required')">
+              La cantidad de clases es obligatoria
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-  <button type="submit">
-    {{ id ? 'Guardar Cambios' : 'Crear Curso' }}
-  </button>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Profesor</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput formControlName="profesor" placeholder="Ej: Prof. Juan Pérez">
+          <mat-error *ngIf="form.get('profesor')?.hasError('required')">
+            El profesor es obligatorio
+          </mat-error>
+        </mat-form-field>
 
-</form>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fecha de Inicio</mat-label>
+            <mat-icon matPrefix>event</mat-icon>
+            <input matInput formControlName="fechaInicio" type="date">
+            <mat-error *ngIf="form.get('fechaInicio')?.hasError('required')">
+              La fecha de inicio es obligatoria
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fecha de Fin</mat-label>
+            <mat-icon matPrefix>event</mat-icon>
+            <input matInput formControlName="fechaFin" type="date">
+            <mat-error *ngIf="form.get('fechaFin')?.hasError('required')">
+              La fecha de fin es obligatoria
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-stroked-button type="button" (click)="cancelar()">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button mat-raised-button color="primary" 
+              (click)="guardar()"
+              [disabled]="form.invalid || (loading$ | async)">
+        <mat-spinner diameter="20" *ngIf="loading$ | async"></mat-spinner>
+        <mat-icon *ngIf="!(loading$ | async)">save</mat-icon>
+        {{ cursoId ? 'Actualizar' : 'Crear' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
 

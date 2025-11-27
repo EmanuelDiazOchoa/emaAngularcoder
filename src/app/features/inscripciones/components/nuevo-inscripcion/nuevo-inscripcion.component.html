@@ -1,23 +1,56 @@
-<div class="container mt-4">
-  <h2>➕ Nueva Inscripción</h2>
+<div class="nueva-inscripcion-container">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>add_circle</mat-icon>
+        Nueva Inscripción
+      </mat-card-title>
+    </mat-card-header>
 
-  <div class="mb-3" *ngIf="esAdmin$ | async">
-    <label>Usuario</label>
-    <select class="form-control" [(ngModel)]="usuarioSeleccionado">
-      <option *ngFor="let u of usuarios$ | async" [value]="u.id">
-        {{ u.nombre }}
-      </option>
-    </select>
-  </div>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Alumno</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-select formControlName="alumnoId">
+            <mat-option *ngFor="let alumno of alumnos$ | async" [value]="alumno.id">
+              {{ alumno.nombre }} {{ alumno.apellido }} - {{ alumno.perfil }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('alumnoId')?.hasError('required')">
+            Debe seleccionar un alumno
+          </mat-error>
+        </mat-form-field>
 
-  <div class="mb-3">
-    <label>Curso</label>
-    <select class="form-control" [(ngModel)]="cursoSeleccionado">
-      <option *ngFor="let c of cursos$ | async" [value]="c.id">
-        {{ c.nombre }}
-      </option>
-    </select>
-  </div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Curso</mat-label>
+          <mat-icon matPrefix>school</mat-icon>
+          <mat-select formControlName="cursoId">
+            <mat-option *ngFor="let curso of cursos$ | async" [value]="curso.id">
+              {{ curso.nombre }} - {{ curso.duracion }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('cursoId')?.hasError('required')">
+            Debe seleccionar un curso
+          </mat-error>
+        </mat-form-field>
 
-  <button class="btn btn-success" (click)="guardar()">Guardar</button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-stroked-button type="button" routerLink="/dashboard/inscripciones">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button mat-raised-button color="primary" 
+              (click)="guardar()"
+              [disabled]="form.invalid || (loading$ | async)">
+        <mat-spinner diameter="20" *ngIf="loading$ | async"></mat-spinner>
+        <mat-icon *ngIf="!(loading$ | async)">save</mat-icon>
+        Inscribir
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>
