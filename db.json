@@ -159,6 +159,13 @@
       "cursoId": 4,
       "usuarioId": 1,
       "fecha": "2024-03-20T15:00:00.000Z"
+    },
+    {
+      "id": "2bd9",
+      "alumnoId": "4",
+      "cursoId": "3",
+      "usuarioId": "1",
+      "fecha": "2025-11-28T21:09:34.210Z"
     }
   ]
 }

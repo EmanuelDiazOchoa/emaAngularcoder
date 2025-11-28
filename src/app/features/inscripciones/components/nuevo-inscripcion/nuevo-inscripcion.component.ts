@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -69,42 +69,30 @@ export class NuevoInscripcionComponent implements OnInit {
   }
 
   guardar(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      this.snackBar.open('Por favor complete todos los campos', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    this.snackBar.open('Complete todos los campos', 'Cerrar', { duration: 3000 });
+    return;
+  }
+
+  
+  this.store.select(selectUser).pipe(take(1)).subscribe(user => {
+    if (!user) {
+      this.snackBar.open('Usuario no identificado', 'Cerrar', { duration: 3000 });
       return;
     }
 
+    const inscripcionData = {
+      alumnoId: Number(this.form.value.alumnoId),
+      cursoId: Number(this.form.value.cursoId),
+      usuarioId: user.id,
+      fecha: new Date().toISOString()
+    };
+
+    this.store.dispatch(InscripcionesActions.createInscripcion({ inscripcion: inscripcionData }));
+    this.snackBar.open('Inscripción creada', 'Cerrar', { duration: 3000 });
     
-    this.store.select(selectUser).subscribe(user => {
-      if (!user) {
-        this.snackBar.open('Error: Usuario no identificado', 'Cerrar', {
-          duration: 3000
-        });
-        return;
-      }
-
-      const inscripcionData = {
-        alumnoId: this.form.value.alumnoId,
-        cursoId: this.form.value.cursoId,
-        usuarioId: user.id,
-        fecha: new Date().toISOString()
-      };
-
-      this.store.dispatch(InscripcionesActions.createInscripcion({ inscripcion: inscripcionData }));
-      
-      this.snackBar.open('Inscripción creada correctamente', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['success-snackbar']
-      });
-
-      
-      setTimeout(() => {
-        this.router.navigate(['/dashboard/inscripciones']);
-      }, 500);
-    });
-  }
+    setTimeout(() => this.router.navigate(['/dashboard/inscripciones']), 500);
+  });
+}
 }

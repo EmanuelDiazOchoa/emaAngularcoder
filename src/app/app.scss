@@ -1,14 +1,12 @@
-/* app.component.css */
 :host {
   display: block;
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #1e1e2f, #121212);
-  color: #fff;
   min-height: 100vh;
 }
 
 .app-container {
   height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .page-container {
@@ -18,44 +16,61 @@
 }
 
 .main-header {
-  background-color: #1e1e2f;
-  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.5rem 2rem;
   text-align: center;
-  border-bottom: 1px solid #333;
-}
+  border-bottom: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-.main-header h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #00bfff;
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
+  }
 }
 
 .content {
   flex: 1;
-}
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 
-.btn-primary {
-  background: #00bfff;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: bold;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.3s ease;
-}
-
-.btn-primary:hover {
-  background: #0099cc;
-  transform: scale(1.05);
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 }
 
 .footer {
   text-align: center;
-  padding: 1rem;
-  background-color: #1e1e2f;
-  color: #aaa;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #1e1e2f 0%, #2a2a3e 100%);
+  color: rgba(255, 255, 255, 0.9);
+  border-top: 3px solid #667eea;
   flex-shrink: 0;
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+}
+
+
+.page-container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

@@ -1,23 +1,45 @@
 <mat-toolbar color="primary">
-
   <button mat-icon-button (click)="toggleSidenav.emit()">
     <mat-icon>menu</mat-icon>
   </button>
 
-  <span>Gestión de Alumnos</span>
+  <span class="toolbar-title">Gestión de Alumnos</span>
 
-  <span class="usuario" *ngIf="user$ | async as user">
-    {{ user.nombre }} ({{ user.rol }})
-  </span>
+  
+  <button mat-button routerLink="/dashboard/alumnos" routerLinkActive="active" *ngIf="isLogged$ | async">
+    <mat-icon>home</mat-icon>
+    <span class="button-text">Inicio</span>
+  </button>
+  
+  <button mat-button routerLink="/dashboard/institucion" routerLinkActive="active" *ngIf="isLogged$ | async">
+    <mat-icon>business</mat-icon>
+    <span class="button-text">Institución</span>
+  </button>
+  
+  <button mat-button routerLink="/dashboard/contacto" routerLinkActive="active" *ngIf="isLogged$ | async">
+    <mat-icon>contact_mail</mat-icon>
+    <span class="button-text">Contacto</span>
+  </button>
 
   <span class="spacer"></span>
 
-  <button mat-button routerLink="/dashboard/alumnos" routerLinkActive="active" *ngIf="isLogged$ | async">Inicio</button>
+  <span class="usuario" *ngIf="user$ | async as user">
+    <mat-icon>account_circle</mat-icon>
+    {{ user.nombre }} ({{ user.rol }})
+  </span>
 
-  <button mat-button routerLink="/dashboard/usuarios" routerLinkActive="active" *ngIf="isAdmin$ | async">Usuarios</button>
+  <button mat-button routerLink="/dashboard/usuarios" routerLinkActive="active" *ngIf="isAdmin$ | async">
+    <mat-icon>people</mat-icon>
+    <span class="button-text">Usuarios</span>
+  </button>
 
-  <button mat-button *ngIf="isLogged$ | async" (click)="logout()">Cerrar Sesión</button>
+  <button mat-stroked-button color="warn" *ngIf="isLogged$ | async" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span class="button-text">Cerrar Sesión</span>
+  </button>
 
-  <button mat-button color="accent" routerLink="/login" *ngIf="!(isLogged$ | async)">Login</button>
-
+  <button mat-raised-button color="accent" routerLink="/login" *ngIf="!(isLogged$ | async)">
+    <mat-icon>login</mat-icon>
+    Login
+  </button>
 </mat-toolbar>
