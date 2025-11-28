@@ -15,6 +15,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import * as CursosActions from '../../../../store/cursos/cursos.actions';
 import { selectAllCursos, selectCursosLoading, selectCursosError } from '../../../../store/cursos/cursos.selectors';
+import { selectIsAdmin } from '../../../../store/auth/auth.selectors';
 
 import { Curso } from '../../../../core/models/curso.model';
 
@@ -44,6 +45,7 @@ export class ListaCursosComponent implements OnInit {
   cursos$: Observable<Curso[]> = this.store.select(selectAllCursos);
   loading$: Observable<boolean> = this.store.select(selectCursosLoading);
   error$: Observable<string | null> = this.store.select(selectCursosError);
+  isAdmin$: Observable<boolean> = this.store.select(selectIsAdmin);
 
   columnas = ['id', 'nombre', 'descripcion', 'duracion', 'clases', 'profesor', 'fechas', 'acciones'];
 
