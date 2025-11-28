@@ -34,9 +34,9 @@
             "production": {
               "budgets": [
                 {
-                  "type": "bundle",
-                  "maximumWarningInBytes": 500000,
-                  "maximumErrorInBytes": 1000000
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 }
               ],
               "outputHashing": "all"
