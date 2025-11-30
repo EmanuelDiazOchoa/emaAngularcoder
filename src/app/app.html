@@ -1,0 +1,25 @@
+<ng-container *ngIf="showLayout; else loginView">
+  <mat-sidenav-container class="app-container">
+    <mat-sidenav #drawer [mode]="(isHandset$ | async) ? 'over' : 'side'">
+      <app-sidebar></app-sidebar>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="page-container">
+        <header class="main-header">
+          <h1>Centro de Estudiantes</h1>
+        </header>
+        <app-navbar (toggleSidenav)="drawer.toggle()"></app-navbar>
+        <div class="content">
+          <router-outlet></router-outlet>
+        </div>
+        <footer class="footer">
+          <p>© 2025 Centro de Estudiantes. Todos los derechos reservados.</p>
+        </footer>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>
+
+<ng-template #loginView>
+  <router-outlet></router-outlet>
+</ng-template>

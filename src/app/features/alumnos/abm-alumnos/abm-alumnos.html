@@ -1,0 +1,97 @@
+
+<div class="abm-container">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>{{ alumnoId ? 'edit' : 'person_add' }}</mat-icon>
+        {{ alumnoId ? 'Editar Alumno' : 'Nuevo Alumno' }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre</mat-label>
+            <mat-icon matPrefix>person</mat-icon>
+            <input matInput formControlName="nombre" placeholder="Ej: Juan">
+            <mat-error *ngIf="form.get('nombre')?.hasError('required')">
+              El nombre es obligatorio
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Apellido</mat-label>
+            <mat-icon matPrefix>person</mat-icon>
+            <input matInput formControlName="apellido" placeholder="Ej: Pérez">
+            <mat-error *ngIf="form.get('apellido')?.hasError('required')">
+              El apellido es obligatorio
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+          <input matInput formControlName="email" type="email" 
+                 placeholder="ejemplo@mail.com">
+          <mat-error *ngIf="form.get('email')?.hasError('required')">
+            El email es obligatorio
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('email')">
+            Email inválido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Perfil</mat-label>
+          <mat-icon matPrefix>work</mat-icon>
+          <mat-select formControlName="perfil">
+            <mat-option value="Desarrollador Frontend">Desarrollador Frontend</mat-option>
+            <mat-option value="Desarrollador Backend">Desarrollador Backend</mat-option>
+            <mat-option value="Desarrollador Full Stack">Desarrollador Full Stack</mat-option>
+            <mat-option value="IT Manager">IT Manager</mat-option>
+            <mat-option value="DevOps">DevOps</mat-option>
+            <mat-option value="QA Tester">QA Tester</mat-option>
+            <mat-option value="Usuario Final">Usuario Final</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('perfil')?.hasError('required')">
+            El perfil es obligatorio
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Teléfono</mat-label>
+            <mat-icon matPrefix>phone</mat-icon>
+            <input matInput formControlName="telefono" 
+                   placeholder="+54 11 1234-5678">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fecha de Inscripción</mat-label>
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <input matInput formControlName="fechaInscripcion" 
+                   type="date">
+          </mat-form-field>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-stroked-button type="button" (click)="cancelar()">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button mat-raised-button color="primary" 
+              (click)="guardar()"
+              [disabled]="form.invalid || (loading$ | async)">
+        <mat-spinner diameter="20" *ngIf="loading$ | async"></mat-spinner>
+        <mat-icon *ngIf="!(loading$ | async)">save</mat-icon>
+        {{ alumnoId ? 'Actualizar' : 'Crear' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

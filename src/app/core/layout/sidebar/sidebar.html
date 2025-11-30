@@ -1,0 +1,65 @@
+<div class="sidebar-container">
+  <div class="user-profile" *ngIf="currentUser$ | async as user">
+    <div class="avatar-container">
+      <div class="avatar">
+        <mat-icon>{{ user.rol === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+      </div>
+      <div class="status-indicator"></div>
+    </div>
+    <div class="user-info">
+      <h3 class="user-name">{{ user.nombre }} {{ user.apellido }}</h3>
+      <p class="user-role">
+        <mat-icon class="role-icon">{{ user.rol === 'admin' ? 'verified_user' : 'badge' }}</mat-icon>
+        {{ user.rol === 'admin' ? 'Administrador' : 'Usuario' }}
+      </p>
+    </div>
+  </div>
+
+  <mat-divider class="divider"></mat-divider>
+
+  <nav class="nav-menu">
+    <div class="menu-section">
+      <p class="section-title">MENÚ PRINCIPAL</p>
+      
+      <a mat-button 
+         routerLink="/dashboard/alumnos" 
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon class="nav-icon">school</mat-icon>
+        <span class="nav-label">Alumnos</span>
+        <mat-icon class="nav-arrow">chevron_right</mat-icon>
+      </a>
+
+      <a mat-button 
+         routerLink="/dashboard/cursos" 
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon class="nav-icon">menu_book</mat-icon>
+        <span class="nav-label">Cursos</span>
+        <mat-icon class="nav-arrow">chevron_right</mat-icon>
+      </a>
+
+      <a mat-button 
+         routerLink="/dashboard/inscripciones" 
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon class="nav-icon">assignment</mat-icon>
+        <span class="nav-label">Inscripciones</span>
+        <mat-icon class="nav-arrow">chevron_right</mat-icon>
+      </a>
+    </div>
+
+    <div class="menu-section" *ngIf="isAdmin$ | async">
+      <p class="section-title">ADMINISTRACIÓN</p>
+      
+      <a mat-button 
+         routerLink="/dashboard/usuarios" 
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon class="nav-icon">people</mat-icon>
+        <span class="nav-label">Usuarios</span>
+        <mat-icon class="nav-arrow">chevron_right</mat-icon>
+      </a>
+    </div>
+  </nav>
+</div>
