@@ -19,14 +19,16 @@
     <p>Cargando inscripciones...</p>
   </div>
 
+
   <mat-card class="error-card" *ngIf="error$ | async as error">
     <mat-icon color="warn">error</mat-icon>
     <p>{{ error }}</p>
   </mat-card>
 
-
   <mat-card *ngIf="!(loading$ | async)" class="table-card">
-    <table mat-table [dataSource]="(inscripcionesExtendidas$ | async) || []" class="mat-elevation-z2">
+    <table mat-table 
+           [dataSource]="(inscripcionesConDatos$ | async) || []" 
+           class="mat-elevation-z2">
 
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef> ID </th>
@@ -36,23 +38,27 @@
       </ng-container>
 
       <ng-container matColumnDef="alumno">
-        <th mat-header-cell *matHeaderCellDef> Alumno </th>
+        <th mat-header-cell *matHeaderCellDef> ALUMNO </th>
         <td mat-cell *matCellDef="let inscripcion">
-          <mat-icon class="icon-inline">person</mat-icon>
-          <strong>{{ inscripcion.alumnoNombre }}</strong>
+          <div class="cell-content">
+            <mat-icon class="icon-inline">person</mat-icon>
+            <strong>{{ inscripcion.alumnoNombre }}</strong>
+          </div>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="curso">
-        <th mat-header-cell *matHeaderCellDef> Curso </th>
+        <th mat-header-cell *matHeaderCellDef> CURSO </th>
         <td mat-cell *matCellDef="let inscripcion">
-          <mat-icon class="icon-inline">school</mat-icon>
-          {{ inscripcion.cursoNombre }}
+          <div class="cell-content">
+            <mat-icon class="icon-inline">school</mat-icon>
+            {{ inscripcion.cursoNombre }}
+          </div>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="usuario">
-        <th mat-header-cell *matHeaderCellDef> Inscrito por </th>
+        <th mat-header-cell *matHeaderCellDef> INSCRITO POR </th>
         <td mat-cell *matCellDef="let inscripcion">
           <mat-chip class="user-chip">
             <mat-icon>person_outline</mat-icon>
@@ -62,15 +68,17 @@
       </ng-container>
 
       <ng-container matColumnDef="fecha">
-        <th mat-header-cell *matHeaderCellDef> Fecha </th>
+        <th mat-header-cell *matHeaderCellDef> FECHA </th>
         <td mat-cell *matCellDef="let inscripcion">
-          <mat-icon class="icon-inline">event</mat-icon>
-          {{ inscripcion.fecha | date:'dd/MM/yyyy HH:mm' }}
+          <div class="cell-content">
+            <mat-icon class="icon-inline">event</mat-icon>
+            {{ inscripcion.fecha | date:'dd/MM/yyyy HH:mm' }}
+          </div>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="acciones">
-        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <th mat-header-cell *matHeaderCellDef> ACCIONES </th>
         <td mat-cell *matCellDef="let inscripcion">
           <button mat-icon-button 
                   color="warn"

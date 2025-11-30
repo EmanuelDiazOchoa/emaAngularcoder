@@ -43,7 +43,6 @@ export class ListaAlumnosComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
-
   alumnos$: Observable<Alumno[]> = this.store.select(selectAllAlumnos);
   loading$: Observable<boolean> = this.store.select(selectAlumnosLoading);
   error$: Observable<string | null> = this.store.select(selectAlumnosError);
@@ -51,14 +50,10 @@ export class ListaAlumnosComponent implements OnInit {
 
   columnas = ['id', 'nombre', 'email', 'perfil', 'telefono', 'fecha', 'acciones'];
   
-
   isMobile = false;
 
   ngOnInit(): void {
-
     this.store.dispatch(AlumnosActions.loadAlumnos());
-    
-    
     this.checkScreenSize();
   }
 
@@ -79,15 +74,27 @@ export class ListaAlumnosComponent implements OnInit {
     this.router.navigate(['/dashboard/alumnos/editar', id]);
   }
 
-  verDetalle(id: number): void {
-    this.router.navigate(['/dashboard/alumnos/detalle', id]);
+  
+  verDetalle(alumno: Alumno): void {
+    const mensaje = `
+📋 DETALLES DEL ALUMNO
+
+👤 Nombre: ${alumno.nombre} ${alumno.apellido}
+📧 Email: ${alumno.email}
+💼 Perfil: ${alumno.perfil}
+📱 Teléfono: ${alumno.telefono || 'No especificado'}
+📅 Inscripción: ${alumno.fechaInscripcion || 'No especificada'}
+    `.trim();
+
+    alert(mensaje); 
   }
 
   eliminarAlumno(id: number): void {
     if (confirm('¿Está seguro de eliminar este alumno?')) {
       this.store.dispatch(AlumnosActions.deleteAlumno({ id }));
       this.snackBar.open('Alumno eliminado correctamente', 'Cerrar', {
-        duration: 3000
+        duration: 3000,
+        panelClass: ['success-snackbar']
       });
     }
   }
