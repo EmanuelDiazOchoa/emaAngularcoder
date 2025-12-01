@@ -18,7 +18,7 @@ import * as AlumnosActions from '../../../../store/alumnos/alumnos.actions';
 import * as CursosActions from '../../../../store/cursos/cursos.actions';
 import { selectAllAlumnos } from '../../../../store/alumnos/alumnos.selectors';
 import { selectAllCursos } from '../../../../store/cursos/cursos.selectors';
-import { selectInscripcionesLoading } from '../../../../store/inscripciones/inscripciones.selectors';
+import { selectInscripcionesLoading, selectAllInscripciones } from '../../../../store/inscripciones/inscripciones.selectors';
 import { selectUser } from '../../../../store/auth/auth.selectors';
 
 import { Alumno } from '../../../../core/models/alumnos.model';
@@ -50,15 +50,15 @@ export class NuevoInscripcionComponent implements OnInit {
   form!: FormGroup;
   loading$: Observable<boolean> = this.store.select(selectInscripcionesLoading);
 
-  
   alumnos$: Observable<Alumno[]> = this.store.select(selectAllAlumnos);
   cursos$: Observable<Curso[]> = this.store.select(selectAllCursos);
 
   ngOnInit(): void {
     this.initForm();
-   
+  
     this.store.dispatch(AlumnosActions.loadAlumnos());
     this.store.dispatch(CursosActions.loadCursos());
+    this.store.dispatch(InscripcionesActions.loadInscripciones());
   }
 
   private initForm(): void {
@@ -68,31 +68,68 @@ export class NuevoInscripcionComponent implements OnInit {
     });
   }
 
-  guardar(): void {
-  if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    this.snackBar.open('Complete todos los campos', 'Cerrar', { duration: 3000 });
-    return;
+  private async validateInscripcion(): Promise<boolean> {
+    const { alumnoId, cursoId } = this.form.value;
+    
+    return new Promise((resolve) => {
+      this.store.select(selectAllInscripciones).pipe(take(1)).subscribe(inscripciones => {
+        
+        const existe = inscripciones.some(inscripcion => 
+          String(inscripcion.alumnoId) === String(alumnoId) && 
+          String(inscripcion.cursoId) === String(cursoId)
+        );
+        
+        if (existe) {
+          this.snackBar.open('El alumno ya está inscrito en este curso', 'Cerrar', {
+            duration: 4000,
+            panelClass: ['error-snackbar']
+          });
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      });
+    });
   }
 
-  
-  this.store.select(selectUser).pipe(take(1)).subscribe(user => {
-    if (!user) {
-      this.snackBar.open('Usuario no identificado', 'Cerrar', { duration: 3000 });
+  async guardar(): Promise<void> {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.snackBar.open('Complete todos los campos', 'Cerrar', { 
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
       return;
     }
 
-    const inscripcionData = {
-      alumnoId: Number(this.form.value.alumnoId),
-      cursoId: Number(this.form.value.cursoId),
-      usuarioId: user.id,
-      fecha: new Date().toISOString()
-    };
+    const isValid = await this.validateInscripcion();
+    if (!isValid) {
+      return;
+    }
 
-    this.store.dispatch(InscripcionesActions.createInscripcion({ inscripcion: inscripcionData }));
-    this.snackBar.open('Inscripción creada', 'Cerrar', { duration: 3000 });
-    
-    setTimeout(() => this.router.navigate(['/dashboard/inscripciones']), 500);
-  });
-}
+    this.store.select(selectUser).pipe(take(1)).subscribe(user => {
+      if (!user) {
+        this.snackBar.open('Usuario no identificado', 'Cerrar', { 
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
+
+      const inscripcionData = {
+        alumnoId: Number(this.form.value.alumnoId),
+        cursoId: Number(this.form.value.cursoId),
+        usuarioId: Number(user.id),
+        fecha: new Date().toISOString()
+      };
+
+      this.store.dispatch(InscripcionesActions.createInscripcion({ inscripcion: inscripcionData }));
+      this.snackBar.open('Inscripción creada correctamente', 'Cerrar', { 
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+      
+      setTimeout(() => this.router.navigate(['/dashboard/inscripciones']), 500);
+    });
+  }
 }

@@ -4,6 +4,12 @@
   margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+  .cursos-container {
+    padding: 12px;
+  }
+}
+
 .header-card {
   margin-bottom: 24px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -31,6 +37,28 @@
   height: 32px;
 }
 
+@media (max-width: 768px) {
+  .header-card mat-card-title {
+    font-size: 20px;
+  }
+
+  .header-card mat-card-title mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .header-card mat-card-title .title-text {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-card mat-card-title {
+    font-size: 18px;
+  }
+}
+
 .header-card mat-card-actions {
   padding: 16px;
   display: flex;
@@ -53,11 +81,34 @@
   margin-right: 8px;
 }
 
+@media (max-width: 480px) {
+  .header-card mat-card-actions button {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .header-card mat-card-actions button .button-text {
+    display: none;
+  }
+
+  .header-card mat-card-actions button mat-icon {
+    margin-right: 0;
+  }
+}
+
 .loading-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 60px;
+  gap: 16px;
+}
+
+.loading-container p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
 }
 
 .error-card {
@@ -162,32 +213,155 @@
 }
 
 
-@media (max-width: 768px) {
-  .cursos-container {
-    padding: 12px;
-  }
+.mobile-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  animation: fadeIn 0.5s ease-out;
+}
 
-  .header-card mat-card-title {
-    font-size: 20px;
+@media (min-width: 480px) and (max-width: 768px) {
+  .mobile-cards {
+    grid-template-columns: repeat(2, 1fr);
   }
+}
 
-  .header-card mat-card-title mat-icon {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
-  }
+.curso-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
 
-  .header-card mat-card-actions button {
-    font-size: 13px;
-    padding: 8px 16px;
-  }
+.curso-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
 
-  .table-card table {
+.curso-card mat-card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px;
+  border-radius: 12px 12px 0 0;
+  margin: -16px -16px 16px -16px;
+}
+
+.curso-card .avatar-circle {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.curso-card .avatar-circle mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: white;
+}
+
+.curso-card mat-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.curso-card mat-card-subtitle .duracion-chip {
+  font-size: 11px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.curso-card mat-card-content {
+  padding: 16px;
+}
+
+.curso-card .descripcion {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.curso-card .info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.curso-card .info-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #667eea;
+}
+
+.curso-card .info-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.curso-card mat-card-actions {
+  padding: 8px;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #eee;
+  gap: 4px;
+}
+
+.curso-card mat-card-actions button {
+  flex: 1;
+  font-size: 13px;
+  height: 36px;
+}
+
+.curso-card mat-card-actions button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+}
+
+@media (max-width: 360px) {
+  .curso-card mat-card-actions button {
     font-size: 12px;
+    padding: 0 8px;
+  }
+
+  .curso-card mat-card-actions button span {
+    display: none;
+  }
+
+  .curso-card mat-card-actions button mat-icon {
+    margin-right: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .table-card table {
+    font-size: 13px;
   }
 
   .table-card th,
   .table-card td {
-    padding: 12px 8px;
+    padding: 12px;
   }
 }

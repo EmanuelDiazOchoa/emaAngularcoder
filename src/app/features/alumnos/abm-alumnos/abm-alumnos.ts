@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { take, map } from 'rxjs/operators';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,9 +15,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
-
 import * as AlumnosActions from '../../../store/alumnos/alumnos.actions';
-import { selectAlumnoById, selectAlumnosLoading } from '../../../store/alumnos/alumnos.selectors';
+import { selectAlumnoById, selectAlumnosLoading, selectAllAlumnos } from '../../../store/alumnos/alumnos.selectors';
 
 import { Alumno } from '../../../core/models/alumnos.model';
 
@@ -78,7 +78,31 @@ export class AbmAlumnosComponent implements OnInit {
     }
   }
 
-  guardar(): void {
+
+  private async validateEmail(): Promise<boolean> {
+    const email = this.form.value.email;
+    
+    return new Promise((resolve) => {
+      this.store.select(selectAllAlumnos).pipe(take(1)).subscribe(alumnos => {
+        const emailExists = alumnos.some(alumno => 
+          alumno.email.toLowerCase() === email.toLowerCase() && 
+          alumno.id !== this.alumnoId
+        );
+        
+        if (emailExists) {
+          this.snackBar.open('El email ya está registrado', 'Cerrar', {
+            duration: 4000,
+            panelClass: ['error-snackbar']
+          });
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  }
+
+  async guardar(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.snackBar.open('Por favor complete todos los campos requeridos', 'Cerrar', {
@@ -88,10 +112,16 @@ export class AbmAlumnosComponent implements OnInit {
       return;
     }
 
+
+    const emailValid = await this.validateEmail();
+    if (!emailValid) {
+      return;
+    }
+
     const alumnoData = this.form.value;
 
     if (this.alumnoId) {
-      
+  
       this.store.dispatch(AlumnosActions.updateAlumno({ 
         id: this.alumnoId, 
         changes: alumnoData 
@@ -101,7 +131,7 @@ export class AbmAlumnosComponent implements OnInit {
         panelClass: ['success-snackbar']
       });
     } else {
-    
+  
       this.store.dispatch(AlumnosActions.createAlumno({ alumno: alumnoData }));
       this.snackBar.open('Alumno creado correctamente', 'Cerrar', {
         duration: 3000,
@@ -109,7 +139,6 @@ export class AbmAlumnosComponent implements OnInit {
       });
     }
 
-    
     setTimeout(() => {
       this.router.navigate(['/dashboard/alumnos']);
     }, 500);

@@ -1,9 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, combineLatest } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,7 +30,6 @@ import { Inscripcion } from '../../../../core/models/inscripcion.model';
 import { Alumno } from '../../../../core/models/alumnos.model';
 import { Curso } from '../../../../core/models/curso.model';
 import { Usuario } from '../../../../core/models/usuario.model';
-
 
 interface InscripcionConDatos extends Inscripcion {
   alumnoNombre: string;
@@ -67,41 +66,24 @@ export class ListaInscripcionesComponent implements OnInit {
   inscripcionesConDatos$: Observable<InscripcionConDatos[]>;
 
   columnas = ['id', 'alumno', 'curso', 'usuario', 'fecha', 'acciones'];
+  isMobile = false;
 
   constructor() {
-   
     this.inscripcionesConDatos$ = combineLatest([
       this.store.select(selectAllInscripciones),
       this.store.select(selectAllAlumnos),
       this.store.select(selectAllCursos),
       this.store.select(selectAllUsuarios)
     ]).pipe(
-      tap(([inscripciones, alumnos, cursos, usuarios]) => {
-      
-        console.log('📊 Datos cargados:');
-        console.log('  - Inscripciones:', inscripciones.length);
-        console.log('  - Alumnos:', alumnos.length);
-        console.log('  - Cursos:', cursos.length);
-        console.log('  - Usuarios:', usuarios.length);
-      }),
       map(([inscripciones, alumnos, cursos, usuarios]) => {
         return inscripciones.map(inscripcion => {
-   
-          const alumno = alumnos.find(a => {
-         
-            return a.id === Number(inscripcion.alumnoId) || 
-                   a.id.toString() === inscripcion.alumnoId.toString();
-          });
-          const curso = cursos.find(c => {
-            return c.id === Number(inscripcion.cursoId) || 
-                   c.id.toString() === inscripcion.cursoId.toString();
-          });
+          const alumnoId = String(inscripcion.alumnoId);
+          const cursoId = String(inscripcion.cursoId);
+          const usuarioId = String(inscripcion.usuarioId);
 
-
-          const usuario = usuarios.find(u => {
-            return u.id === Number(inscripcion.usuarioId) || 
-                   u.id.toString() === inscripcion.usuarioId.toString();
-          });
+          const alumno = alumnos.find(a => String(a.id) === alumnoId);
+          const curso = cursos.find(c => String(c.id) === cursoId);
+          const usuario = usuarios.find(u => String(u.id) === usuarioId);
 
           const resultado: InscripcionConDatos = {
             ...inscripcion,
@@ -116,14 +98,6 @@ export class ListaInscripcionesComponent implements OnInit {
               : `Usuario ID: ${inscripcion.usuarioId} (no encontrado)`
           };
 
-          console.log('✅ Inscripción resuelta:', {
-            id: inscripcion.id,
-            alumnoId: inscripcion.alumnoId,
-            alumnoNombre: resultado.alumnoNombre,
-            cursoNombre: resultado.cursoNombre,
-            usuarioNombre: resultado.usuarioNombre
-          });
-
           return resultado;
         });
       })
@@ -131,13 +105,20 @@ export class ListaInscripcionesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('🚀 Iniciando carga de datos...');
-    
-
     this.store.dispatch(InscripcionesActions.loadInscripciones());
     this.store.dispatch(AlumnosActions.loadAlumnos());
     this.store.dispatch(CursosActions.loadCursos());
     this.store.dispatch(UsuariosActions.loadUsuarios());
+    this.checkScreenSize();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isMobile = window.innerWidth < 768;
   }
 
   nuevaInscripcion(): void {

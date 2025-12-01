@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -41,17 +41,26 @@ export class ListaCursosComponent implements OnInit {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
-  
   cursos$: Observable<Curso[]> = this.store.select(selectAllCursos);
   loading$: Observable<boolean> = this.store.select(selectCursosLoading);
   error$: Observable<string | null> = this.store.select(selectCursosError);
   isAdmin$: Observable<boolean> = this.store.select(selectIsAdmin);
 
   columnas = ['id', 'nombre', 'descripcion', 'duracion', 'clases', 'profesor', 'fechas', 'acciones'];
+  isMobile = false;
 
   ngOnInit(): void {
-    
     this.store.dispatch(CursosActions.loadCursos());
+    this.checkScreenSize();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isMobile = window.innerWidth < 768;
   }
 
   nuevoCurso(): void {
@@ -62,15 +71,28 @@ export class ListaCursosComponent implements OnInit {
     this.router.navigate(['/dashboard/cursos/editar', id]);
   }
 
-  verDetalle(id: number): void {
-    this.router.navigate(['/dashboard/cursos/detalle', id]);
+  verDetalle(curso: Curso): void {
+    const mensaje = `
+📚 DETALLES DEL CURSO
+
+📖 Nombre: ${curso.nombre}
+📝 Descripción: ${curso.descripcion}
+⏱️ Duración: ${curso.duracion}
+📊 Cantidad de Clases: ${curso.cantidadClases}
+👨‍🏫 Profesor: ${curso.profesor}
+📅 Inicio: ${curso.fechaInicio}
+📅 Fin: ${curso.fechaFin}
+    `.trim();
+
+    alert(mensaje);
   }
 
   eliminarCurso(id: number): void {
     if (confirm('¿Está seguro de eliminar este curso?')) {
       this.store.dispatch(CursosActions.deleteCurso({ id }));
       this.snackBar.open('Curso eliminado correctamente', 'Cerrar', {
-        duration: 3000
+        duration: 3000,
+        panelClass: ['success-snackbar']
       });
     }
   }
