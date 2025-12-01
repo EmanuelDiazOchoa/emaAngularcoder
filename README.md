@@ -501,9 +501,9 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 ## 👨‍💻 Autor
 
 **Tu Nombre**
-- GitHub: [@tu-usuario](https://github.com/tu-usuario)
-- LinkedIn: [Tu Perfil](https://linkedin.com/in/tu-perfil)
-- Email: tu@email.com
+- GitHub: [@tu-usuario](https://github.com/EmanuelDiazOchoa)
+- LinkedIn: [Tu Perfil](https://www.linkedin.com/in/hector-emanuel-diaz-ochoa/)
+- Email: emagnr93@gmail.com
 
 ---
 
@@ -516,15 +516,6 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ---
 
-## 📞 Soporte
-
-Si tienes preguntas o problemas, por favor:
-
-1. Revisa la [documentación](docs/)
-2. Busca en [issues existentes](https://github.com/tu-usuario/centro-estudiantes/issues)
-3. Crea un [nuevo issue](https://github.com/tu-usuario/centro-estudiantes/issues/new)
-
----
 
 <div align="center">
 
