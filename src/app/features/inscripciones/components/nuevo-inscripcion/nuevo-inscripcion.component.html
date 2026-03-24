@@ -1,56 +1,63 @@
-<div class="nueva-inscripcion-container">
-  <mat-card class="form-card">
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>add_circle</mat-icon>
-        Nueva Inscripción
-      </mat-card-title>
-    </mat-card-header>
+<div class="form-page-wrapper">
+  <mat-card class="form-card-wrapper">
 
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="guardar()">
-        
-        <mat-form-field appearance="outline" class="full-width">
+    <div class="form-card-header">
+      <mat-icon>add_circle</mat-icon>
+      <h3>Nueva Inscripción</h3>
+    </div>
+
+    <div class="form-card-body">
+      <form [formGroup]="form">
+
+        <mat-form-field appearance="outline">
           <mat-label>Alumno</mat-label>
           <mat-icon matPrefix>person</mat-icon>
           <mat-select formControlName="alumnoId">
-            <mat-option *ngFor="let alumno of alumnos$ | async" [value]="alumno.id">
-              {{ alumno.nombre }} {{ alumno.apellido }} - {{ alumno.perfil }}
-            </mat-option>
+            @for (alumno of alumnos$ | async; track alumno.id) {
+              <mat-option [value]="alumno.id">
+                {{ alumno.nombre }} {{ alumno.apellido }} — {{ alumno.perfil }}
+              </mat-option>
+            }
           </mat-select>
-          <mat-error *ngIf="form.get('alumnoId')?.hasError('required')">
-            Debe seleccionar un alumno
-          </mat-error>
+          @if (form.get('alumnoId')?.hasError('required')) {
+            <mat-error>Debe seleccionar un alumno</mat-error>
+          }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline">
           <mat-label>Curso</mat-label>
           <mat-icon matPrefix>school</mat-icon>
           <mat-select formControlName="cursoId">
-            <mat-option *ngFor="let curso of cursos$ | async" [value]="curso.id">
-              {{ curso.nombre }} - {{ curso.duracion }}
-            </mat-option>
+            @for (curso of cursos$ | async; track curso.id) {
+              <mat-option [value]="curso.id">
+                {{ curso.nombre }} — {{ curso.duracion }}
+              </mat-option>
+            }
           </mat-select>
-          <mat-error *ngIf="form.get('cursoId')?.hasError('required')">
-            Debe seleccionar un curso
-          </mat-error>
+          @if (form.get('cursoId')?.hasError('required')) {
+            <mat-error>Debe seleccionar un curso</mat-error>
+          }
         </mat-form-field>
 
       </form>
-    </mat-card-content>
+    </div>
 
-    <mat-card-actions align="end">
+    <div class="form-card-footer">
       <button mat-stroked-button type="button" routerLink="/dashboard/inscripciones">
         <mat-icon>close</mat-icon>
         Cancelar
       </button>
-      <button mat-raised-button color="primary" 
+      <button mat-flat-button color="primary"
               (click)="guardar()"
               [disabled]="form.invalid || (loading$ | async)">
-        <mat-spinner diameter="20" *ngIf="loading$ | async"></mat-spinner>
-        <mat-icon *ngIf="!(loading$ | async)">save</mat-icon>
+        @if (loading$ | async) {
+          <mat-spinner diameter="18"></mat-spinner>
+        } @else {
+          <mat-icon>save</mat-icon>
+        }
         Inscribir
       </button>
-    </mat-card-actions>
+    </div>
+
   </mat-card>
 </div>
