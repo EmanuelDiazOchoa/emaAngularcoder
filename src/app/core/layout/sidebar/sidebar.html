@@ -1,65 +1,49 @@
-<div class="sidebar-container">
-  <div class="user-profile" *ngIf="currentUser$ | async as user">
-    <div class="avatar-container">
+<div class="sidebar">
+
+  @if (currentUser$ | async; as user) {
+    <div class="sidebar-profile">
       <div class="avatar">
         <mat-icon>{{ user.rol === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
       </div>
-      <div class="status-indicator"></div>
+      <div class="profile-info">
+        <p class="profile-name">{{ user.nombre }} {{ user.apellido }}</p>
+        <span class="profile-role" [class.admin]="user.rol === 'admin'">
+          {{ user.rol === 'admin' ? 'Administrador' : 'Usuario' }}
+        </span>
+      </div>
     </div>
-    <div class="user-info">
-      <h3 class="user-name">{{ user.nombre }} {{ user.apellido }}</h3>
-      <p class="user-role">
-        <mat-icon class="role-icon">{{ user.rol === 'admin' ? 'verified_user' : 'badge' }}</mat-icon>
-        {{ user.rol === 'admin' ? 'Administrador' : 'Usuario' }}
-      </p>
-    </div>
-  </div>
+  }
 
-  <mat-divider class="divider"></mat-divider>
+  <mat-divider class="sidebar-divider"></mat-divider>
 
-  <nav class="nav-menu">
-    <div class="menu-section">
-      <p class="section-title">MENÚ PRINCIPAL</p>
-      
-      <a mat-button 
-         routerLink="/dashboard/alumnos" 
-         routerLinkActive="active"
-         class="nav-item">
-        <mat-icon class="nav-icon">school</mat-icon>
-        <span class="nav-label">Alumnos</span>
-        <mat-icon class="nav-arrow">chevron_right</mat-icon>
-      </a>
+  <nav class="sidebar-nav">
+    <p class="nav-section-label">Principal</p>
 
-      <a mat-button 
-         routerLink="/dashboard/cursos" 
-         routerLinkActive="active"
-         class="nav-item">
-        <mat-icon class="nav-icon">menu_book</mat-icon>
-        <span class="nav-label">Cursos</span>
-        <mat-icon class="nav-arrow">chevron_right</mat-icon>
-      </a>
+    <a class="nav-item" routerLink="/dashboard/alumnos" routerLinkActive="active">
+      <mat-icon class="nav-icon">school</mat-icon>
+      <span>Alumnos</span>
+    </a>
 
-      <a mat-button 
-         routerLink="/dashboard/inscripciones" 
-         routerLinkActive="active"
-         class="nav-item">
-        <mat-icon class="nav-icon">assignment</mat-icon>
-        <span class="nav-label">Inscripciones</span>
-        <mat-icon class="nav-arrow">chevron_right</mat-icon>
-      </a>
-    </div>
+    <a class="nav-item" routerLink="/dashboard/cursos" routerLinkActive="active">
+      <mat-icon class="nav-icon">menu_book</mat-icon>
+      <span>Cursos</span>
+    </a>
 
-    <div class="menu-section" *ngIf="isAdmin$ | async">
-      <p class="section-title">ADMINISTRACIÓN</p>
-      
-      <a mat-button 
-         routerLink="/dashboard/usuarios" 
-         routerLinkActive="active"
-         class="nav-item">
+    <a class="nav-item" routerLink="/dashboard/inscripciones" routerLinkActive="active">
+      <mat-icon class="nav-icon">assignment</mat-icon>
+      <span>Inscripciones</span>
+    </a>
+
+    @if (isAdmin$ | async) {
+      <p class="nav-section-label" style="margin-top:16px">Administración</p>
+      <a class="nav-item" routerLink="/dashboard/usuarios" routerLinkActive="active">
         <mat-icon class="nav-icon">people</mat-icon>
-        <span class="nav-label">Usuarios</span>
-        <mat-icon class="nav-arrow">chevron_right</mat-icon>
+        <span>Usuarios</span>
       </a>
-    </div>
+    }
   </nav>
+
+  <div class="sidebar-footer">
+    <span class="version-label">v1.0.0 · Angular 19</span>
+  </div>
 </div>

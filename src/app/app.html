@@ -1,25 +1,26 @@
-<ng-container *ngIf="showLayout; else loginView">
-  <mat-sidenav-container class="app-container">
-    <mat-sidenav #drawer [mode]="(isHandset$ | async) ? 'over' : 'side'">
-      <app-sidebar></app-sidebar>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <div class="page-container">
-        <header class="main-header">
-          <h1>Centro de Estudiantes</h1>
-        </header>
+@if (showLayout) {
+  <div class="app-shell">
+    <header class="app-header">
+      <h1>🎓 Centro de Estudiantes</h1>
+    </header>
+
+    <mat-sidenav-container class="sidenav-container">
+      <mat-sidenav #drawer [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
+        <app-sidebar></app-sidebar>
+      </mat-sidenav>
+
+      <mat-sidenav-content>
         <app-navbar (toggleSidenav)="drawer.toggle()"></app-navbar>
-        <div class="content">
+        <div class="main-content">
           <router-outlet></router-outlet>
         </div>
-        <footer class="footer">
-          <p>© 2025 Centro de Estudiantes. Todos los derechos reservados.</p>
+        <footer class="app-footer">
+          <p>© 2025 Centro de Estudiantes</p>
+          <p>Desarrollado con Angular 19 + NgRx</p>
         </footer>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</ng-container>
-
-<ng-template #loginView>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+} @else {
   <router-outlet></router-outlet>
-</ng-template>
+}
