@@ -21,7 +21,7 @@ import { Curso } from '../../../../core/models/curso.model';
 @Component({
   selector: 'app-abm-cursos',
   templateUrl: './abm-cursos.component.html',
-  styleUrls: ['./abm-cursos.component.css'],
+  styleUrls: ['./abm-cursos.component.scss'],
   standalone: true,
   imports: [
     CommonModule,

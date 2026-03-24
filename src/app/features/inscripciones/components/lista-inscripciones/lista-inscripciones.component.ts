@@ -40,7 +40,7 @@ interface InscripcionConDatos extends Inscripcion {
 @Component({
   selector: 'app-lista-inscripciones',
   templateUrl: './lista-inscripciones.component.html',
-  styleUrls: ['./lista-inscripciones.component.css'],
+  styleUrls: ['./lista-inscripciones.component.scss'],
   standalone: true,
   imports: [
     CommonModule,

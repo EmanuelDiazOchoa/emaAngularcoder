@@ -22,7 +22,7 @@ import { Curso } from '../../../../core/models/curso.model';
 @Component({
   selector: 'app-lista-cursos',
   templateUrl: './lista-cursos.component.html',
-  styleUrls: ['./lista-cursos.component.css'],
+  styleUrls: ['./lista-cursos.component.scss'],
   standalone: true,
   imports: [
     CommonModule,

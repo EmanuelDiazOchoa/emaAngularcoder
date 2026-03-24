@@ -20,7 +20,6 @@ import { NgIf, AsyncPipe } from '@angular/common';
     MatButtonModule,
     MatIconModule,
     RouterModule,
-    NgIf,
     AsyncPipe
   ]
 })
