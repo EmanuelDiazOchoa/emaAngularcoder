@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { MainLayoutComponent } from './core/layout/main-layout/main-layout.component';
 
 export const routes: Routes = [
 
@@ -11,12 +12,13 @@ export const routes: Routes = [
 
   { 
     path: 'login', 
-    loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent) 
+    loadComponent: () => import('./auth/login/login.component')
+      .then(m => m.LoginComponent) 
   },
-
 
   {
     path: 'dashboard',
+    component: MainLayoutComponent, 
     canMatch: [authGuard],
     children: [
 
@@ -28,24 +30,32 @@ export const routes: Routes = [
 
       { 
         path: 'alumnos', 
-        loadChildren: () => import('./features/alumnos/alumnos.routes').then(m => m.ALUMNOS_ROUTES), 
+        loadChildren: () => import('./features/alumnos/alumnos.routes')
+          .then(m => m.ALUMNOS_ROUTES),
         data: { title: 'Alumnos' } 
       },
+
       { 
         path: 'cursos', 
-        loadChildren: () => import('./features/cursos/cursos.routes').then(m => m.CURSOS_ROUTES), 
+        loadChildren: () => import('./features/cursos/cursos.routes')
+          .then(m => m.CURSOS_ROUTES),
         data: { title: 'Cursos' } 
       },
+
       { 
         path: 'inscripciones', 
-        loadChildren: () => import('./features/inscripciones/inscripciones.routes').then(m => m.INSCRIPCIONES_ROUTES), 
+        loadChildren: () => import('./features/inscripciones/inscripciones.routes')
+          .then(m => m.INSCRIPCIONES_ROUTES),
         data: { title: 'Inscripciones' } 
       },
+
       { 
         path: 'usuarios', 
-        loadChildren: () => import('./features/usuarios/usuarios.routes').then(m => m.USUARIOS_ROUTES), 
+        loadChildren: () => import('./features/usuarios/usuarios.routes')
+          .then(m => m.USUARIOS_ROUTES),
         data: { title: 'Usuarios' } 
       },
+
     ]
   },
 
