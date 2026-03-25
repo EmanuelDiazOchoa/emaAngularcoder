@@ -18,6 +18,27 @@ import { inscripcionesReducer } from './store/inscripciones/inscripciones.reduce
 import { InscripcionesEffects } from './store/inscripciones/inscripciones.effects';
 import { usuariosReducer } from './store/usuarios/usuarios.reducer';
 import { UsuariosEffects } from './store/usuarios/usuarios.effects';
+import { AppState } from './store/app.state';
+import { ActionReducerMap } from '@ngrx/store';
+
+function getInitialAuthState() {
+  try {
+    const token = localStorage.getItem('auth_token');
+    const userJson = localStorage.getItem('current_user');
+    if (token && userJson) {
+      return { user: JSON.parse(userJson) };
+    }
+  } catch {}
+  return { user: null };
+}
+
+const reducers: ActionReducerMap<AppState> = {
+  auth: authReducer,
+  alumnos: alumnosReducer,
+  cursos: cursosReducer,
+  inscripciones: inscripcionesReducer,
+  usuarios: usuariosReducer
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,12 +48,10 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimations(),
     AuthService,
-    provideStore({ 
-      auth: authReducer,
-      alumnos: alumnosReducer,
-      cursos: cursosReducer,
-      inscripciones: inscripcionesReducer,
-      usuarios: usuariosReducer  
+    provideStore(reducers, {
+      initialState: {
+        auth: getInitialAuthState()
+      } 
     }),
     provideEffects([
       AuthEffects, 
