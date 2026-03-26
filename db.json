@@ -167,6 +167,13 @@
       "cursoId": 2,
       "usuarioId": "1",
       "fecha": "2025-11-30T16:59:22.930Z"
+    },
+    {
+      "alumnoId": 4,
+      "cursoId": 2,
+      "usuarioId": 2,
+      "fecha": "2026-03-26T14:44:41.583Z",
+      "id": "2ViyylU"
     }
   ]
 }
