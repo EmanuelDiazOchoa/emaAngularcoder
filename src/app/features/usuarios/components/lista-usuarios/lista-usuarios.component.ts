@@ -58,11 +58,13 @@ export class ListaUsuariosComponent implements OnInit {
   }
 
   eliminarUsuario(id: number): void {
-    if (confirm('¿Está seguro de eliminar este usuario?')) {
-      this.store.dispatch(UsuariosActions.deleteUsuario({ id }));
-      this.snackBar.open('Usuario eliminado correctamente', 'Cerrar', {
-        duration: 3000
-      });
-    }
-  }
+  const ref = this.snackBar.open('¿Eliminar este usuario?', 'Confirmar', {
+    duration: 5000,
+    panelClass: ['error-snackbar']
+  });
+  ref.onAction().subscribe(() => {
+    this.store.dispatch(UsuariosActions.deleteUsuario({ id }));
+    this.snackBar.open('Usuario eliminado', 'Cerrar', { duration: 3000 });
+  });
+}
 }

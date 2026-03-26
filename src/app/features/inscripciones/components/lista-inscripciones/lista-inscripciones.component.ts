@@ -126,12 +126,13 @@ export class ListaInscripcionesComponent implements OnInit {
   }
 
   eliminarInscripcion(id: number): void {
-    if (confirm('¿Está seguro de eliminar esta inscripción?')) {
-      this.store.dispatch(InscripcionesActions.deleteInscripcion({ id }));
-      this.snackBar.open('Inscripción eliminada correctamente', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['success-snackbar']
-      });
-    }
+  const ref = this.snackBar.open('¿Eliminar esta inscripción?', 'Confirmar', {
+    duration: 5000,
+    panelClass: ['error-snackbar']
+  });
+  ref.onAction().subscribe(() => {
+    this.store.dispatch(InscripcionesActions.deleteInscripcion({ id }));
+    this.snackBar.open('Inscripción eliminada', 'Cerrar', { duration: 3000 });
+  });
   }
 }

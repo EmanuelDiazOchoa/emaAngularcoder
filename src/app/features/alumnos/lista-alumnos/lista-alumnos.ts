@@ -76,26 +76,21 @@ export class ListaAlumnosComponent implements OnInit {
 
   
   verDetalle(alumno: Alumno): void {
-    const mensaje = `
-📋 DETALLES DEL ALUMNO
+  this.snackBar.open(
+    `${alumno.nombre} ${alumno.apellido} · ${alumno.perfil} · ${alumno.email}`,
+    'Cerrar',
+    { duration: 6000 }
+  );
+}
 
-👤 Nombre: ${alumno.nombre} ${alumno.apellido}
-📧 Email: ${alumno.email}
-💼 Perfil: ${alumno.perfil}
-📱 Teléfono: ${alumno.telefono || 'No especificado'}
-📅 Inscripción: ${alumno.fechaInscripcion || 'No especificada'}
-    `.trim();
-
-    alert(mensaje); 
-  }
-
-  eliminarAlumno(id: number): void {
-    if (confirm('¿Está seguro de eliminar este alumno?')) {
-      this.store.dispatch(AlumnosActions.deleteAlumno({ id }));
-      this.snackBar.open('Alumno eliminado correctamente', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['success-snackbar']
-      });
-    }
+eliminarAlumno(id: number): void {
+  const ref = this.snackBar.open('¿Eliminar este alumno?', 'Confirmar', {
+    duration: 5000,
+    panelClass: ['error-snackbar']
+  });
+  ref.onAction().subscribe(() => {
+    this.store.dispatch(AlumnosActions.deleteAlumno({ id }));
+    this.snackBar.open('Alumno eliminado', 'Cerrar', { duration: 3000 });
+  });
   }
 }
