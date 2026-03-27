@@ -42,7 +42,7 @@ export class ListaUsuariosComponent implements OnInit {
   loading$: Observable<boolean> = this.store.select(selectUsuariosLoading);
   error$: Observable<string | null> = this.store.select(selectUsuariosError);
 
-  columnas = ['id', 'nombre', 'email', 'rol', 'telefono', 'fecha', 'acciones'];
+  columnas = ['id', 'nombre', 'rol', 'telefono', 'fecha', 'acciones'];
 
   ngOnInit(): void {
     

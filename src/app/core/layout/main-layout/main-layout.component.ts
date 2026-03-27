@@ -1,3 +1,4 @@
+// src/app/core/layout/main-layout/main-layout.component.ts
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -16,10 +17,10 @@ export class MainLayoutComponent {
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
   }
-}
-onLinkClicked() {
 
-  if (window.innerWidth < 768) {
-    this.sidebarOpen = false;
+  onLinkClicked() {
+    if (window.innerWidth < 768) {
+      this.sidebarOpen = false;
+    }
   }
 }

@@ -45,7 +45,7 @@ export class ListaCursosComponent implements OnInit {
   error$: Observable<string | null> = this.store.select(selectCursosError);
   isAdmin$: Observable<boolean> = this.store.select(selectIsAdmin);
 
-columnas = ['id', 'nombre', 'rol', 'telefono', 'fecha', 'acciones'];
+  columnas = ['id', 'nombre', 'duracion', 'clases', 'profesor', 'fechas', 'acciones'];
   isMobile = false;
 
   ngOnInit(): void {
