@@ -81,6 +81,15 @@
       "perfil": "Usuario Final",
       "telefono": "+54 11 8888-9999",
       "fechaInscripcion": "2024-03-20"
+    },
+    {
+      "nombre": "grrg",
+      "apellido": "efbjkbjfe",
+      "email": "fefe@de.com",
+      "perfil": "QA Tester",
+      "telefono": "1121212121212",
+      "fechaInscripcion": "2026-03-27",
+      "id": "2kD51di"
     }
   ],
   "cursos": [
@@ -174,6 +183,13 @@
       "usuarioId": 2,
       "fecha": "2026-03-26T14:44:41.583Z",
       "id": "2ViyylU"
+    },
+    {
+      "alumnoId": 2,
+      "cursoId": 4,
+      "usuarioId": 2,
+      "fecha": "2026-03-27T15:14:06.369Z",
+      "id": "r__5MFv"
     }
   ]
 }
