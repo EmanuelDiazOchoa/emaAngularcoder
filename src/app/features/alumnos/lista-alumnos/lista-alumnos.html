@@ -1,6 +1,5 @@
 <div class="page-wrapper">
 
-  <!-- Header -->
   <mat-card class="page-header-card">
     <div class="header-inner">
       <div class="header-title">
@@ -8,149 +7,151 @@
         <h2>Gestión de Alumnos</h2>
       </div>
       @if (isAdmin$ | async) {
-        <div class="header-action">
-          <button mat-stroked-button (click)="nuevoAlumno()">
-            <mat-icon>add</mat-icon>
-            Nuevo Alumno
-          </button>
-        </div>
+      <div class="header-action">
+        <button mat-stroked-button (click)="nuevoAlumno()">
+          <mat-icon>add</mat-icon>
+          Nuevo Alumno
+        </button>
+      </div>
       }
     </div>
   </mat-card>
 
-  <!-- Loading -->
   @if (loading$ | async) {
-    <div class="loading-state">
-      <mat-spinner [diameter]="40"></mat-spinner>
-      <span>Cargando alumnos...</span>
-    </div>
+  <div class="loading-state">
+    <mat-spinner [diameter]="40"></mat-spinner>
+    <span>Cargando alumnos...</span>
+  </div>
   }
 
-  <!-- Error -->
   @if (error$ | async; as error) {
-    <div class="error-banner">
-      <mat-icon>error_outline</mat-icon>
-      <span>{{ error }}</span>
-    </div>
+  <div class="error-banner">
+    <mat-icon>error_outline</mat-icon>
+    <span>{{ error }}</span>
+  </div>
   }
 
-  <!-- Desktop Table -->
   @if (!(loading$ | async) && !isMobile) {
-    <mat-card class="data-card">
-      <div class="table-scroll-wrapper">
-        <table mat-table [dataSource]="(alumnos$ | async) || []">
+  <mat-card class="data-card">
+    <div class="table-scroll-wrapper">
+      <table mat-table [dataSource]="(alumnos$ | async) || []">
 
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef>#</th>
-            <td mat-cell *matCellDef="let a">
-              <span class="id-badge">{{ a.id }}</span>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let a">
+            <span class="id-badge">{{ a.id }}</span>
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="nombre">
-            <th mat-header-cell *matHeaderCellDef>Alumno</th>
-            <td mat-cell *matCellDef="let a">
-              <div class="cell-name">
-                <div class="cell-avatar">{{ (a.nombre | slice:0:1) }}{{ (a.apellido | slice:0:1) }}</div>
-                <div>
-                  <div class="cell-title">{{ a | nombreCompleto }}</div>
-                  <div class="cell-sub">{{ a.email }}</div>
-                </div>
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Alumno</th>
+          <td mat-cell *matCellDef="let a">
+            <div class="cell-name">
+              <div class="cell-avatar">{{ (a.nombre | slice:0:1) }}{{ (a.apellido | slice:0:1) }}</div>
+              <div>
+                <div class="cell-title">{{ a | nombreCompleto }}</div>
+                <div class="cell-sub">{{ a.email }}</div>
               </div>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="perfil">
-            <th mat-header-cell *matHeaderCellDef>Perfil</th>
-            <td mat-cell *matCellDef="let a">
-              <mat-chip class="chip-profile">{{ a.perfil }}</mat-chip>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="telefono">
-            <th mat-header-cell *matHeaderCellDef>Teléfono</th>
-            <td mat-cell *matCellDef="let a">
-              <span class="cell-muted">{{ a.telefono || '—' }}</span>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="fecha">
-            <th mat-header-cell *matHeaderCellDef>Inscripción</th>
-            <td mat-cell *matCellDef="let a">
-              <span class="cell-muted">{{ a.fechaInscripcion | date:'dd/MM/yyyy' }}</span>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="acciones">
-            <th mat-header-cell *matHeaderCellDef>Acciones</th>
-            <td mat-cell *matCellDef="let a">
-              <div class="action-btns">
-                <button mat-icon-button (click)="verDetalle(a)" matTooltip="Ver detalle" class="btn-view">
-                  <mat-icon>visibility</mat-icon>
-                </button>
-                @if (isAdmin$ | async) {
-                  <button mat-icon-button (click)="editarAlumno(a.id)" matTooltip="Editar" class="btn-edit">
-                    <mat-icon>edit</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="eliminarAlumno(a.id)" matTooltip="Eliminar" class="btn-delete">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                }
-              </div>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="columnas"></tr>
-          <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
-        </table>
-      </div>
-    </mat-card>
-  }
-
-  <!-- Mobile Cards -->
-  @if (!(loading$ | async) && isMobile) {
-    <div class="mobile-grid">
-      @for (a of (alumnos$ | async); track a.id) {
-        <mat-card class="mobile-entity-card">
-          <div class="card-header">
-            <div class="card-avatar">
-              <mat-icon>person</mat-icon>
             </div>
-            <p class="card-name">{{ a | nombreCompleto }}</p>
-            <p class="card-sub">{{ a.perfil }}</p>
-          </div>
-          <div class="card-body">
-            <div class="info-row">
-              <mat-icon>email</mat-icon>
-              <span>{{ a.email }}</span>
-            </div>
-            @if (a.telefono) {
-              <div class="info-row">
-                <mat-icon>phone</mat-icon>
-                <span>{{ a.telefono }}</span>
-              </div>
-            }
-            <div class="info-row">
-              <mat-icon>event</mat-icon>
-              <span>{{ a.fechaInscripcion | date:'dd/MM/yyyy' }}</span>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button mat-button color="accent" (click)="verDetalle(a)">
-              <mat-icon>visibility</mat-icon> Ver
-            </button>
-            @if (isAdmin$ | async) {
-              <button mat-button color="primary" (click)="editarAlumno(a.id)">
-                <mat-icon>edit</mat-icon> Editar
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="perfil">
+          <th mat-header-cell *matHeaderCellDef>Perfil</th>
+          <td mat-cell *matCellDef="let a">
+            <mat-chip class="chip-profile">{{ a.perfil }}</mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="telefono">
+          <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+          <td mat-cell *matCellDef="let a">
+            <span class="cell-muted">{{ a.telefono || '—' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef>Inscripción</th>
+          <td mat-cell *matCellDef="let a">
+            <span class="cell-muted">{{ a.fechaInscripcion | date:'dd/MM/yyyy' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let a">
+            <div class="action-btns">
+              <button mat-icon-button (click)="verDetalle(a)" matTooltip="Ver detalle" class="btn-view">
+                <mat-icon>visibility</mat-icon>
               </button>
-              <button mat-button color="warn" (click)="eliminarAlumno(a.id)">
+              @if (isAdmin$ | async) {
+              <button mat-icon-button (click)="editarAlumno(a.id)" matTooltip="Editar" class="btn-edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="eliminarAlumno(a.id)" matTooltip="Eliminar" class="btn-delete">
                 <mat-icon>delete</mat-icon>
               </button>
-            }
-          </div>
-        </mat-card>
+              }
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+      </table>
+      @if ((alumnos$ | async)?.length === 0) {
+      <div class="empty-state">
+        <mat-icon>school</mat-icon>
+        <p>No hay alumnos registrados</p>
+      </div>
       }
     </div>
+  </mat-card>
+  }
+
+  @if (!(loading$ | async) && isMobile) {
+  <div class="mobile-grid">
+    @for (a of (alumnos$ | async); track a.id) {
+    <mat-card class="mobile-entity-card">
+      <div class="card-header">
+        <div class="card-avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <p class="card-name">{{ a | nombreCompleto }}</p>
+        <p class="card-sub">{{ a.perfil }}</p>
+      </div>
+      <div class="card-body">
+        <div class="info-row">
+          <mat-icon>email</mat-icon>
+          <span>{{ a.email }}</span>
+        </div>
+        @if (a.telefono) {
+        <div class="info-row">
+          <mat-icon>phone</mat-icon>
+          <span>{{ a.telefono }}</span>
+        </div>
+        }
+        <div class="info-row">
+          <mat-icon>event</mat-icon>
+          <span>{{ a.fechaInscripcion | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button mat-button color="accent" (click)="verDetalle(a)">
+          <mat-icon>visibility</mat-icon> Ver
+        </button>
+        @if (isAdmin$ | async) {
+        <button mat-button color="primary" (click)="editarAlumno(a.id)">
+          <mat-icon>edit</mat-icon> Editar
+        </button>
+        <button mat-button color="warn" (click)="eliminarAlumno(a.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        }
+      </div>
+    </mat-card>
+    }
+  </div>
   }
 
 </div>

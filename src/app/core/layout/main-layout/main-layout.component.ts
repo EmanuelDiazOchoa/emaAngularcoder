@@ -8,18 +8,18 @@ import { SidebarComponent } from '../sidebar/sidebar';
   standalone: true,
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss'],
-  imports: [
-    RouterOutlet,    
-    NavbarComponent,  
-    SidebarComponent  
-  ]
+  imports: [RouterOutlet, NavbarComponent, SidebarComponent]
 })
 export class MainLayoutComponent {
-
-  sidebarOpen = false;
+  sidebarOpen = true;
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
   }
+}
+onLinkClicked() {
 
+  if (window.innerWidth < 768) {
+    this.sidebarOpen = false;
+  }
 }

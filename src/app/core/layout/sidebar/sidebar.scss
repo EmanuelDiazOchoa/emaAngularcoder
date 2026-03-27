@@ -161,3 +161,36 @@
     transform: translateX(0);
   }
 }
+
+.sidebar.collapsed {
+  width: 64px;
+
+  .sidebar-nav {
+    padding: 12px 4px;
+  }
+
+  .nav-item {
+    justify-content: center;
+    padding: 12px;
+    gap: 0;
+  }
+
+  .avatar-mini {
+    width: 40px;
+    height: 40px;
+    margin: 16px auto 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+  }
+}

@@ -45,7 +45,7 @@ export class ListaCursosComponent implements OnInit {
   error$: Observable<string | null> = this.store.select(selectCursosError);
   isAdmin$: Observable<boolean> = this.store.select(selectIsAdmin);
 
-  columnas = ['id', 'nombre', 'duracion', 'clases', 'profesor', 'fechas', 'acciones'];
+columnas = ['id', 'nombre', 'rol', 'telefono', 'fecha', 'acciones'];
   isMobile = false;
 
   ngOnInit(): void {
@@ -70,29 +70,22 @@ export class ListaCursosComponent implements OnInit {
     this.router.navigate(['/dashboard/cursos/editar', id]);
   }
 
-  verDetalle(curso: Curso): void {
-    const mensaje = `
-📚 DETALLES DEL CURSO
-
-📖 Nombre: ${curso.nombre}
-📝 Descripción: ${curso.descripcion}
-⏱️ Duración: ${curso.duracion}
-📊 Cantidad de Clases: ${curso.cantidadClases}
-👨‍🏫 Profesor: ${curso.profesor}
-📅 Inicio: ${curso.fechaInicio}
-📅 Fin: ${curso.fechaFin}
-    `.trim();
-
-    alert(mensaje);
-  }
+verDetalle(curso: Curso): void {
+  this.snackBar.open(
+    `${curso.nombre} · ${curso.duracion} · ${curso.profesor}`,
+    'Cerrar',
+    { duration: 6000 }
+  );
+}
 
   eliminarCurso(id: number): void {
-    if (confirm('¿Está seguro de eliminar este curso?')) {
-      this.store.dispatch(CursosActions.deleteCurso({ id }));
-      this.snackBar.open('Curso eliminado correctamente', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['success-snackbar']
-      });
-    }
+  const ref = this.snackBar.open('¿Eliminar este curso?', 'Confirmar', {
+    duration: 5000,
+    panelClass: ['error-snackbar']
+  });
+  ref.onAction().subscribe(() => {
+    this.store.dispatch(CursosActions.deleteCurso({ id }));
+    this.snackBar.open('Curso eliminado', 'Cerrar', { duration: 3000 });
+  });
   }
 }

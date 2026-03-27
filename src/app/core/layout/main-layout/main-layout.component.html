@@ -1,9 +1,9 @@
-<div class="layout">
+<div class="layout" [class.sidebar-collapsed]="!sidebarOpen">
 
-  <app-sidebar 
+  <app-sidebar
     class="sidebar"
-    [class.open]="sidebarOpen"
-    (linkClicked)="sidebarOpen = false">
+    [collapsed]="!sidebarOpen"
+    (linkClicked)="onLinkClicked()">
   </app-sidebar>
 
   <div class="main">

@@ -1,49 +1,67 @@
-<div class="sidebar">
+<div class="sidebar" [class.collapsed]="collapsed">
 
-  @if (currentUser$ | async; as user) {
-    <div class="sidebar-profile">
-      <div class="avatar">
+  @if (!collapsed) {
+    @if (currentUser$ | async; as user) {
+      <div class="sidebar-profile">
+        <div class="avatar">
+          <mat-icon>{{ user.rol === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+        </div>
+        <div class="profile-info">
+          <p class="profile-name">{{ user.nombre }} {{ user.apellido }}</p>
+          <span class="profile-role" [class.admin]="user.rol === 'admin'">
+            {{ user.rol === 'admin' ? 'Administrador' : 'Usuario' }}
+          </span>
+        </div>
+      </div>
+    }
+    <mat-divider class="sidebar-divider"></mat-divider>
+  } @else {
+    @if (currentUser$ | async; as user) {
+      <div class="avatar-mini" [matTooltip]="user.nombre + ' ' + user.apellido" matTooltipPosition="right">
         <mat-icon>{{ user.rol === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
       </div>
-      <div class="profile-info">
-        <p class="profile-name">{{ user.nombre }} {{ user.apellido }}</p>
-        <span class="profile-role" [class.admin]="user.rol === 'admin'">
-          {{ user.rol === 'admin' ? 'Administrador' : 'Usuario' }}
-        </span>
-      </div>
-    </div>
+    }
+    <mat-divider class="sidebar-divider"></mat-divider>
   }
 
-  <mat-divider class="sidebar-divider"></mat-divider>
-
   <nav class="sidebar-nav">
-    <p class="nav-section-label">Principal</p>
+    @if (!collapsed) {
+      <p class="nav-section-label">Principal</p>
+    }
 
-    <a class="nav-item" routerLink="/dashboard/alumnos" routerLinkActive="active">
+    <a class="nav-item" routerLink="/dashboard/alumnos" routerLinkActive="active"
+       [matTooltip]="collapsed ? 'Alumnos' : ''" matTooltipPosition="right">
       <mat-icon class="nav-icon">school</mat-icon>
-      <span>Alumnos</span>
+      @if (!collapsed) { <span>Alumnos</span> }
     </a>
 
-    <a class="nav-item" routerLink="/dashboard/cursos" routerLinkActive="active">
+    <a class="nav-item" routerLink="/dashboard/cursos" routerLinkActive="active"
+       [matTooltip]="collapsed ? 'Cursos' : ''" matTooltipPosition="right">
       <mat-icon class="nav-icon">menu_book</mat-icon>
-      <span>Cursos</span>
+      @if (!collapsed) { <span>Cursos</span> }
     </a>
 
-    <a class="nav-item" routerLink="/dashboard/inscripciones" routerLinkActive="active">
+    <a class="nav-item" routerLink="/dashboard/inscripciones" routerLinkActive="active"
+       [matTooltip]="collapsed ? 'Inscripciones' : ''" matTooltipPosition="right">
       <mat-icon class="nav-icon">assignment</mat-icon>
-      <span>Inscripciones</span>
+      @if (!collapsed) { <span>Inscripciones</span> }
     </a>
 
     @if (isAdmin$ | async) {
-      <p class="nav-section-label" style="margin-top:16px">Administración</p>
-      <a class="nav-item" routerLink="/dashboard/usuarios" routerLinkActive="active">
+      @if (!collapsed) {
+        <p class="nav-section-label" style="margin-top:16px">Administración</p>
+      }
+      <a class="nav-item" routerLink="/dashboard/usuarios" routerLinkActive="active"
+         [matTooltip]="collapsed ? 'Usuarios' : ''" matTooltipPosition="right">
         <mat-icon class="nav-icon">people</mat-icon>
-        <span>Usuarios</span>
+        @if (!collapsed) { <span>Usuarios</span> }
       </a>
     }
   </nav>
 
-  <div class="sidebar-footer">
-    <span class="version-label">v1.0.0 · Angular 19</span>
-  </div>
+  @if (!collapsed) {
+    <div class="sidebar-footer">
+      <span class="version-label">v1.0.0 · Angular 19</span>
+    </div>
+  }
 </div>
