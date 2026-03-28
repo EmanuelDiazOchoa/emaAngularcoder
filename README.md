@@ -51,8 +51,8 @@ Sistema completo de gestión académica desarrollado con Angular 19, NgRx para m
 - ⚡ **Redux (NgRx)**: Manejo de estado global centralizado
 - 🎨 **Material Design**: Interfaz moderna y responsive
 - 🔄 **Reactive Forms**: Validación en tiempo real
-- 🛡️ **Guards & Interceptors**: Protección de rutas y manejo de tokens
-- 📱 **Responsive Design**: Adaptado a todos los dispositivos
+- 🔒 **Guards**: AuthGuard, AdminGuard y RolGuard para protección de rutas
+- 📱 **Responsive Design**: Sidebar colapsable en desktop, cards en mobile
 - 🚀 **Lazy Loading**: Carga optimizada de módulos
 - 🎯 **Standalone Components**: Arquitectura moderna de Angular
 

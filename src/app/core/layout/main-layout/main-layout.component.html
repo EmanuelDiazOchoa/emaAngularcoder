@@ -5,6 +5,12 @@
     (linkClicked)="onLinkClicked()">
   </app-sidebar>
 
+  <!-- overlay para cerrar en mobile -->
+  <div class="sidebar-overlay"
+       [class.visible]="sidebarOpen"
+       (click)="onLinkClicked()">
+  </div>
+
   <div class="main">
     <app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
     <div class="content">

@@ -29,8 +29,9 @@
   }
 
   @if (!(loading$ | async) && !isMobile) {
-  <mat-card class="data-card">
-    <div class="table-scroll-wrapper">
+    <mat-card class="data-card">
+      <div class="table-scroll-wrapper">
+        <table mat-table [dataSource]="(usuarios$ | async) || []">
 
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>#</th>
@@ -95,13 +96,53 @@
           <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
         </table>
         @if ((usuarios$ | async)?.length === 0) {
-        <div class="empty-state">
-          <mat-icon>people_outline</mat-icon>
-          <p>No hay usuarios registrados</p>
-        </div>
-      }
+          <div class="empty-state">
+            <mat-icon>people_outline</mat-icon>
+            <p>No hay usuarios registrados</p>
+          </div>
+        }
       </div>
     </mat-card>
+  }
+
+  @if (!(loading$ | async) && isMobile) {
+    <div class="mobile-grid">
+      @for (u of (usuarios$ | async); track u.id) {
+        <mat-card class="mobile-entity-card">
+          <div class="card-header">
+            <div class="card-avatar">
+              <mat-icon>{{ u.rol === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+            </div>
+            <p class="card-name">{{ u.nombre }} {{ u.apellido }}</p>
+            <p class="card-sub">{{ u.rol === 'admin' ? 'Administrador' : 'Usuario' }}</p>
+          </div>
+          <div class="card-body">
+            <div class="info-row">
+              <mat-icon>email</mat-icon>
+              <span>{{ u.email }}</span>
+            </div>
+            @if (u.telefono) {
+              <div class="info-row">
+                <mat-icon>phone</mat-icon>
+                <span>{{ u.telefono }}</span>
+              </div>
+            }
+            <div class="info-row">
+              <mat-icon>event</mat-icon>
+              <span>{{ u.fechaCreacion | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button mat-button color="primary" (click)="editarUsuario(u.id)">
+              <mat-icon>edit</mat-icon> Editar
+            </button>
+            <button mat-button color="warn" (click)="eliminarUsuario(u.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      }
+    </div>
   }
 
 </div>

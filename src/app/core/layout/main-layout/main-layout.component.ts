@@ -1,9 +1,7 @@
-// src/app/core/layout/main-layout/main-layout.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { SidebarComponent } from '../sidebar/sidebar';
-
 
 @Component({
   selector: 'app-main-layout',
@@ -16,7 +14,6 @@ export class MainLayoutComponent implements OnInit {
   sidebarOpen = true;
 
   ngOnInit() {
-    // en mobile arranca cerrado
     if (window.innerWidth < 768) {
       this.sidebarOpen = false;
     }

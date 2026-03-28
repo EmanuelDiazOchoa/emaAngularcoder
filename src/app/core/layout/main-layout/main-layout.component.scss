@@ -28,25 +28,24 @@ app-sidebar {
   padding: 16px;
 }
 
+.sidebar-overlay {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  app-sidebar {
+  .sidebar-overlay {
+    display: block;
     position: fixed;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: var(--sidebar-w) !important;
-    z-index: 1000;
-    transform: translateX(-100%);
-    transition: transform var(--transition);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
   }
 
-  /* En mobile: sidebar-collapsed = cerrado (oculto) */
-  .layout.sidebar-collapsed app-sidebar {
-    transform: translateX(-100%);
-  }
-
-  /* En mobile: sidebar abierto = sidebarOpen=true = NO tiene clase sidebar-collapsed */
-  .layout:not(.sidebar-collapsed) app-sidebar {
-    transform: translateX(0);
+  .sidebar-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
   }
 }
