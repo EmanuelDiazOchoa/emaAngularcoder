@@ -12,12 +12,12 @@ export class CursoService {
   private http = inject(HttpClient);
   private readonly API_URL = `${environment.apiUrl}/cursos`;
 
-  getAll(): Observable<Curso[]> {
-    return this.http.get<Curso[]>(this.API_URL).pipe(
-      retry(2),
-      catchError(this.handleError)
-    );
-  }
+getAll(): Observable<Curso[]> {
+  return this.http.get<Curso[]>(this.API_URL).pipe(
+    retry({ count: 6, delay: 5000 }),
+    catchError(this.handleError)
+  );
+}
 
   obtenerCursos(): Observable<Curso[]> {
     return this.getAll();

@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry, map } from 'rxjs/operators';
 import { Inscripcion } from '../../../core/models/inscripcion.model';
+import { Alumno } from '../../../core/models/alumnos.model';
 import { environment } from '../../../../environment/environment';
 
 @Injectable({
@@ -13,12 +14,12 @@ export class InscripcionesService {
   private readonly API_URL = `${environment.apiUrl}/inscripciones`;
 
 
-  getAll(): Observable<Inscripcion[]> {
-    return this.http.get<Inscripcion[]>(this.API_URL).pipe(
-      retry(2),
-      catchError(this.handleError)
-    );
-  }
+getAll(): Observable<Inscripcion[]> {
+  return this.http.get<Inscripcion[]>(this.API_URL).pipe(
+    retry({ count: 6, delay: 5000 }),
+    catchError(this.handleError)
+  );
+}
 
 
   obtenerInscripciones(): Observable<Inscripcion[]> {

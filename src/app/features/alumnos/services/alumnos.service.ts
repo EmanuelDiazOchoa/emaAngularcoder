@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, timer } from 'rxjs';
 import { catchError, retry, map } from 'rxjs/operators';
 import { Alumno } from '../../../core/models/alumnos.model';
 import { environment } from '../../../../environment/environment';
@@ -13,13 +13,12 @@ export class AlumnosService {
   private readonly API_URL = `${environment.apiUrl}/alumnos`;
 
 
-  getAll(): Observable<Alumno[]> {
-    return this.http.get<Alumno[]>(this.API_URL).pipe(
-      retry(2), 
-      catchError(this.handleError)
-    );
-  }
-
+getAll(): Observable<Alumno[]> {
+  return this.http.get<Alumno[]>(this.API_URL).pipe(
+    retry({ count: 6, delay: 5000 }),
+    catchError(this.handleError)
+  );
+}
   getById(id: number): Observable<Alumno> {
     return this.http.get<Alumno>(`${this.API_URL}/${id}`).pipe(
       catchError(this.handleError)
