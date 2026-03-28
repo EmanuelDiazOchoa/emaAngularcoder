@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { SidebarComponent } from '../sidebar/sidebar';
 
+
 @Component({
   selector: 'app-main-layout',
   standalone: true,
@@ -11,8 +12,15 @@ import { SidebarComponent } from '../sidebar/sidebar';
   styleUrls: ['./main-layout.component.scss'],
   imports: [RouterOutlet, NavbarComponent, SidebarComponent]
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements OnInit {
   sidebarOpen = true;
+
+  ngOnInit() {
+    // en mobile arranca cerrado
+    if (window.innerWidth < 768) {
+      this.sidebarOpen = false;
+    }
+  }
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;

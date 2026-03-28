@@ -48,7 +48,7 @@ export class ListaAlumnosComponent implements OnInit {
   error$: Observable<string | null> = this.store.select(selectAlumnosError);
   isAdmin$: Observable<boolean> = this.store.select(selectIsAdmin);
 
-  columnas = ['id', 'nombre', 'email', 'perfil', 'telefono', 'fecha', 'acciones'];
+  columnas = ['id', 'nombre', 'perfil', 'telefono', 'fecha', 'acciones'];
   
   isMobile = false;
 

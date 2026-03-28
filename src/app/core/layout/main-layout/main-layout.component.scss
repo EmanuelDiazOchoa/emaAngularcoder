@@ -40,11 +40,12 @@ app-sidebar {
     transition: transform var(--transition);
   }
 
+  /* En mobile: sidebar-collapsed = cerrado (oculto) */
   .layout.sidebar-collapsed app-sidebar {
-    width: var(--sidebar-w) !important;
     transform: translateX(-100%);
   }
 
+  /* En mobile: sidebar abierto = sidebarOpen=true = NO tiene clase sidebar-collapsed */
   .layout:not(.sidebar-collapsed) app-sidebar {
     transform: translateX(0);
   }

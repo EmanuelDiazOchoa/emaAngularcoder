@@ -28,10 +28,9 @@
     </div>
   }
 
-  @if (!(loading$ | async)) {
-    <mat-card class="data-card">
-      <div class="table-scroll-wrapper">
-        <table mat-table [dataSource]="(usuarios$ | async) || []">
+  @if (!(loading$ | async) && !isMobile) {
+  <mat-card class="data-card">
+    <div class="table-scroll-wrapper">
 
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>#</th>

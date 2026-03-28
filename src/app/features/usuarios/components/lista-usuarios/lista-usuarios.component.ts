@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -44,9 +44,22 @@ export class ListaUsuariosComponent implements OnInit {
 
   columnas = ['id', 'nombre', 'rol', 'telefono', 'fecha', 'acciones'];
 
+  
+
+  isMobile = false;
+
   ngOnInit(): void {
-    
     this.store.dispatch(UsuariosActions.loadUsuarios());
+    this.checkScreenSize();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isMobile = window.innerWidth < 768;
   }
 
   nuevoUsuario(): void {
